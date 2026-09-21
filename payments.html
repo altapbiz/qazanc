@@ -119,11 +119,13 @@
       background: rgba(255,255,255,.035);
       color: #8996a9;
       font-size: 13px;
+      line-height: 1.6;
     }
 
     .error {
       color: #ff8585;
       border: 1px solid rgba(255,70,70,.18);
+      word-break: break-word;
     }
 
     .payment {
@@ -243,9 +245,14 @@
 
     <a href="dashboard.html" class="back">
 
-      <svg width="18" height="18" viewBox="0 0 24 24"
-           fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
+
         <path d="M15 18l-6-6 6-6"/>
+
       </svg>
 
       Kabinetə qayıt
@@ -309,8 +316,11 @@
 
     <button class="logout" id="logoutBtn">
 
-      <svg width="18" height="18" viewBox="0 0 24 24"
-           fill="none" stroke="currentColor" stroke-width="2">
+      <svg width="18" height="18"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="2">
 
         <path d="M10 17l5-5-5-5"/>
         <path d="M15 12H3"/>
@@ -344,114 +354,170 @@ const client =
 
 async function loadPayments() {
 
-  const { data: userData, error: userError } =
-    await client.auth.getUser();
-
-
-  if (userError || !userData.user) {
-
-    window.location.href = "index.html";
-
-    return;
-  }
-
-
-  const userId = userData.user.id;
-
-
-  const { data, error } =
-    await client
-      .from("odenisler")
-      .select("id, mebleg, status")
-      .eq("istifadeci_id", userId)
-      .order("id", { ascending: false });
-
-
   const list =
     document.getElementById("list");
 
 
-  if (error) {
+  try {
 
-    list.innerHTML =
-      '<div class="error">Ödəniş məlumatlarını yükləmək mümkün olmadı.</div>';
-
-    return;
-  }
-
-
-  if (!data || data.length === 0) {
-
-    list.innerHTML =
-      '<div class="empty">Hələ ödəniş sorğusu yoxdur.</div>';
-
-    return;
-  }
+    const {
+      data: userData,
+      error: userError
+    } = await client.auth.getUser();
 
 
-  list.innerHTML = "";
+    if (userError) {
+
+      list.innerHTML =
+        '<div class="error">' +
+        'Hesab məlumatı alınmadı: ' +
+        userError.message +
+        '</div>';
+
+      return;
+    }
 
 
-  data.forEach(item => {
+    if (!userData || !userData.user) {
 
-    const amount =
-      Number(item.mebleg || 0).toFixed(2);
+      window.location.href =
+        "index.html";
 
-    const status =
-      item.status || "gozleyir";
-
-
-    const row =
-      document.createElement("div");
-
-    row.className = "payment";
+      return;
+    }
 
 
-    row.innerHTML = `
+    const userId =
+      userData.user.id;
 
-      <div class="payment-left">
 
-        <div class="payment-icon">
+    const {
+      data,
+      error
+    } = await client
+      .from("odenisler")
+      .select("id, mebleg, status")
+      .eq("istifadeci_id", userId)
+      .order("id", {
+        ascending: false
+      });
 
-          <svg viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2">
 
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <path d="M3 10h18"/>
-            <path d="M7 15h4"/>
+    if (error) {
 
-          </svg>
+      console.error(
+        "Supabase ödəniş xətası:",
+        error
+      );
+
+      list.innerHTML =
+        '<div class="error">' +
+        '<strong>Supabase xətası</strong><br><br>' +
+        error.message +
+        '</div>';
+
+      return;
+    }
+
+
+    if (!data || data.length === 0) {
+
+      list.innerHTML =
+        '<div class="empty">' +
+        'Hələ ödəniş sorğusu yoxdur.' +
+        '</div>';
+
+      return;
+    }
+
+
+    list.innerHTML = "";
+
+
+    data.forEach(item => {
+
+      const amount =
+        Number(item.mebleg || 0)
+        .toFixed(2);
+
+
+      const status =
+        item.status || "gozleyir";
+
+
+      const row =
+        document.createElement("div");
+
+      row.className =
+        "payment";
+
+
+      row.innerHTML = `
+
+        <div class="payment-left">
+
+          <div class="payment-icon">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+
+              <rect x="3" y="5"
+                    width="18"
+                    height="14"
+                    rx="2"/>
+
+              <path d="M3 10h18"/>
+
+              <path d="M7 15h4"/>
+
+            </svg>
+
+          </div>
+
+
+          <div>
+
+            <div class="payment-title">
+              Ödəniş sorğusu
+            </div>
+
+            <div class="status">
+              ${status}
+            </div>
+
+          </div>
 
         </div>
 
 
-        <div>
-
-          <div class="payment-title">
-            Ödəniş sorğusu
-          </div>
-
-          <div class="status">
-            ${status}
-          </div>
-
+        <div class="amount">
+          ${amount} AZN
         </div>
 
-      </div>
+      `;
 
 
-      <div class="amount">
-        ${amount} AZN
-      </div>
+      list.appendChild(row);
 
-    `;
+    });
 
 
-    list.appendChild(row);
+  } catch (err) {
 
-  });
+    console.error(
+      "Gözlənilməz xəta:",
+      err
+    );
+
+    list.innerHTML =
+      '<div class="error">' +
+      'Xəta baş verdi: ' +
+      (err.message || err) +
+      '</div>';
+
+  }
 
 }
 
@@ -460,14 +526,17 @@ loadPayments();
 
 
 document.getElementById("logoutBtn")
-.addEventListener("click", async () => {
+  .addEventListener(
+    "click",
+    async () => {
 
-  await client.auth.signOut();
+      await client.auth.signOut();
 
-  window.location.href =
-    "index.html";
+      window.location.href =
+        "index.html";
 
-});
+    }
+  );
 
 </script>
 
