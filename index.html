@@ -1,11 +1,238 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qazanc</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Qazanc</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,sans-serif;
+background:#07110d;
+color:#fff;
+min-height:100vh;
+}
+header{
+height:70px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 22px;
+border-bottom:1px solid #183a29;
+background:#091810;
+position:sticky;
+top:0;
+z-index:10;
+}
+.logo{
+font-size:25px;
+font-weight:900;
+color:#20e879;
+}
+.login{
+border:1px solid #20e879;
+padding:11px 18px;
+border-radius:12px;
+color:#20e879;
+text-decoration:none;
+font-weight:bold;
+}
+.hero{
+padding:65px 22px 35px;
+text-align:center;
+background:
+radial-gradient(circle at top,#123c25 0,#07110d 55%);
+}
+.badge{
+display:inline-block;
+padding:8px 14px;
+border-radius:30px;
+background:#12351f;
+color:#57f59a;
+font-size:13px;
+margin-bottom:18px;
+}
+h1{
+font-size:44px;
+line-height:1.05;
+margin-bottom:18px;
+}
+.hero p{
+max-width:650px;
+margin:auto;
+color:#aabbb1;
+font-size:17px;
+line-height:1.6;
+}
+.buttons{
+margin-top:28px;
+display:flex;
+justify-content:center;
+gap:12px;
+flex-wrap:wrap;
+}
+.btn{
+padding:14px 23px;
+border-radius:13px;
+font-weight:bold;
+text-decoration:none;
+}
+.primary{
+background:#20e879;
+color:#031009;
+}
+.secondary{
+border:1px solid #315440;
+color:#fff;
+}
+.container{
+max-width:1050px;
+margin:auto;
+padding:30px 20px 60px;
+}
+.section-title{
+text-align:center;
+font-size:28px;
+margin:20px 0 25px;
+}
+.cards{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+}
+.card{
+background:#0c1b13;
+border:1px solid #1b3927;
+border-radius:18px;
+padding:24px;
+}
+.card h3{
+font-size:21px;
+margin-bottom:12px;
+color:#fff;
+}
+.price{
+font-size:28px;
+font-weight:900;
+color:#20e879;
+margin-bottom:10px;
+}
+.card p{
+color:#9eafa5;
+line-height:1.5;
+font-size:14px;
+}
+.info{
+margin-top:30px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+}
+.info div{
+background:#0a1810;
+border:1px solid #183523;
+border-radius:15px;
+padding:20px;
+text-align:center;
+}
+.info strong{
+display:block;
+font-size:25px;
+color:#20e879;
+margin-bottom:6px;
+}
+.info span{
+font-size:13px;
+color:#9eafa5;
+}
+footer{
+border-top:1px solid #183a29;
+text-align:center;
+padding:25px;
+color:#72847a;
+font-size:13px;
+}
+
+@media(max-width:750px){
+h1{font-size:34px}
+.cards,.info{grid-template-columns:1fr}
+header{padding:0 15px}
+}
+</style>
 </head>
+
 <body>
-  <h1>Qazanc</h1>
+
+<header>
+<div class="logo">QAZANC</div>
+<a class="login" href="#">Giriş</a>
+</header>
+
+<section class="hero">
+<div class="badge">Qazanc platforması</div>
+
+<h1>Qazancını idarə et,<br>hesabını izləyin.</h1>
+
+<p>
+Şəxsi hesabınızı yaradın, mövcud imkanlara baxın
+və hesabınızdakı əməliyyatları rahat şəkildə izləyin.
+</p>
+
+<div class="buttons">
+<a class="btn primary" href="#">Qeydiyyatdan keç</a>
+<a class="btn secondary" href="#">Daxil ol</a>
+</div>
+</section>
+
+<main class="container">
+
+<h2 class="section-title">Qazanc planları</h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Başlanğıc</h3>
+<div class="price">10 AZN</div>
+<p>Başlanğıc məbləği və hesab imkanları haqqında məlumat.</p>
+</div>
+
+<div class="card">
+<h3>Standart</h3>
+<div class="price">30 AZN</div>
+<p>Daha geniş hesab imkanları üçün nəzərdə tutulmuş plan.</p>
+</div>
+
+<div class="card">
+<h3>Premium</h3>
+<div class="price">50 AZN</div>
+<p>Premium istifadəçilər üçün əlavə imkanlar.</p>
+</div>
+
+</div>
+
+<div class="info">
+<div>
+<strong>24/7</strong>
+<span>Hesab əlçatanlığı</span>
+</div>
+
+<div>
+<strong>3</strong>
+<span>Plan seçimi</span>
+</div>
+
+<div>
+<strong>AZN</strong>
+<span>Əsas valyuta</span>
+</div>
+</div>
+
+</main>
+
+<footer>
+© 2026 Qazanc. Bütün hüquqlar qorunur.
+</footer>
+
 </body>
 </html>
