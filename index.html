@@ -2,129 +2,621 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qazanc</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Qazanc — Rəqəmsal Qazanc Platforması</title>
 
 <style>
 *{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+    --green:#19f58a;
+    --green2:#0bcf70;
+    --dark:#030806;
+    --card:rgba(13,25,20,.72);
+    --border:rgba(45,255,145,.16);
+    --text:#f5fff9;
+    --muted:#8c9e95;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-  font-family:Arial,sans-serif;
-  background:#07110d;
-  color:#fff;
-  min-height:100vh;
+    font-family:Inter,Arial,sans-serif;
+    background:
+        radial-gradient(circle at 50% -10%,rgba(24,245,126,.18),transparent 35%),
+        radial-gradient(circle at 90% 40%,rgba(0,255,128,.08),transparent 25%),
+        #030806;
+    color:var(--text);
+    min-height:100vh;
+    overflow-x:hidden;
 }
 
+/* BACKGROUND */
+
+body:before{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    background:rgba(0,255,128,.06);
+    filter:blur(100px);
+    border-radius:50%;
+    top:20%;
+    left:-180px;
+    pointer-events:none;
+}
+
+body:after{
+    content:"";
+    position:fixed;
+    width:400px;
+    height:400px;
+    background:rgba(20,255,130,.05);
+    filter:blur(100px);
+    border-radius:50%;
+    right:-180px;
+    bottom:10%;
+    pointer-events:none;
+}
+
+/* HEADER */
+
 header{
-  height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 22px;
-  border-bottom:1px solid #183a29;
-  background:#091810;
+    height:76px;
+    padding:0 5%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:100;
+    background:rgba(3,8,6,.72);
+    backdrop-filter:blur(22px);
+    border-bottom:1px solid rgba(255,255,255,.06);
 }
 
 .logo{
-  font-size:25px;
-  font-weight:900;
-  color:#20e879;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:24px;
+    font-weight:900;
+    letter-spacing:-1px;
 }
 
-.login{
-  border:1px solid #20e879;
-  padding:11px 18px;
-  border-radius:12px;
-  color:#20e879;
-  text-decoration:none;
-  font-weight:bold;
+.logo-icon{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,#20ff91,#087d48);
+    color:#021007;
+    font-weight:1000;
+    box-shadow:0 0 25px rgba(25,245,138,.3);
 }
+
+.logo span{
+    color:var(--green);
+}
+
+.header-btn{
+    padding:11px 18px;
+    border-radius:12px;
+    color:#fff;
+    text-decoration:none;
+    border:1px solid rgba(25,245,138,.45);
+    background:rgba(25,245,138,.06);
+    font-weight:700;
+    transition:.25s;
+}
+
+.header-btn:hover{
+    background:var(--green);
+    color:#031009;
+}
+
+/* HERO */
 
 .hero{
-  min-height:calc(100vh - 70px);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  padding:30px 20px;
-  background:
-    radial-gradient(circle at top,#123c25 0,#07110d 55%);
-}
-
-.content{
-  max-width:650px;
+    max-width:1200px;
+    margin:auto;
+    min-height:680px;
+    padding:80px 25px 50px;
+    display:grid;
+    grid-template-columns:1.1fr .9fr;
+    align-items:center;
+    gap:60px;
 }
 
 .badge{
-  display:inline-block;
-  padding:8px 15px;
-  border-radius:30px;
-  background:#12351f;
-  color:#57f59a;
-  font-size:13px;
-  margin-bottom:20px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:9px 14px;
+    border:1px solid rgba(25,245,138,.22);
+    background:rgba(25,245,138,.07);
+    border-radius:50px;
+    color:#75ffb2;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:22px;
 }
 
-h1{
-  font-size:48px;
-  line-height:1.05;
-  margin-bottom:20px;
+.badge-dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 12px var(--green);
 }
 
-p{
-  color:#aabbb1;
-  font-size:17px;
-  line-height:1.6;
-  margin-bottom:30px;
+.hero h1{
+    font-size:clamp(44px,6vw,76px);
+    line-height:.98;
+    letter-spacing:-4px;
+    max-width:750px;
+    margin-bottom:25px;
 }
 
-.buttons{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
+.hero h1 span{
+    color:var(--green);
+    text-shadow:0 0 35px rgba(25,245,138,.18);
+}
+
+.hero-text{
+    color:#9eaea6;
+    font-size:18px;
+    line-height:1.7;
+    max-width:590px;
+}
+
+.hero-buttons{
+    display:flex;
+    gap:13px;
+    flex-wrap:wrap;
+    margin-top:32px;
 }
 
 .btn{
-  padding:15px 25px;
-  border-radius:13px;
-  font-weight:bold;
-  text-decoration:none;
-  cursor:pointer;
+    padding:15px 23px;
+    border-radius:14px;
+    text-decoration:none;
+    font-weight:800;
+    transition:.25s;
 }
 
-.primary{
-  background:#20e879;
-  color:#031009;
+.btn-main{
+    color:#031009;
+    background:linear-gradient(135deg,#38ffa0,#12d875);
+    box-shadow:0 10px 35px rgba(25,245,138,.18);
 }
 
-.secondary{
-  border:1px solid #315440;
-  color:#fff;
+.btn-main:hover{
+    transform:translateY(-2px);
+    box-shadow:0 15px 45px rgba(25,245,138,.3);
 }
+
+.btn-outline{
+    color:#fff;
+    border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.035);
+}
+
+.btn-outline:hover{
+    border-color:rgba(25,245,138,.4);
+}
+
+/* DASHBOARD CARD */
+
+.dashboard{
+    position:relative;
+}
+
+.balance-card{
+    position:relative;
+    padding:28px;
+    border-radius:27px;
+    background:
+        linear-gradient(145deg,rgba(25,245,138,.12),rgba(9,18,14,.82));
+    border:1px solid rgba(25,245,138,.18);
+    box-shadow:
+        0 30px 80px rgba(0,0,0,.4),
+        inset 0 1px 0 rgba(255,255,255,.05);
+    overflow:hidden;
+}
+
+.balance-card:before{
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    border-radius:50%;
+    background:rgba(25,245,138,.12);
+    filter:blur(70px);
+    right:-80px;
+    top:-80px;
+}
+
+.card-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+}
+
+.card-label{
+    color:#91a199;
+    font-size:13px;
+}
+
+.status{
+    padding:6px 10px;
+    border-radius:20px;
+    font-size:11px;
+    color:#67ffac;
+    background:rgba(25,245,138,.09);
+    border:1px solid rgba(25,245,138,.16);
+}
+
+.balance{
+    font-size:42px;
+    font-weight:900;
+    margin:22px 0 5px;
+    letter-spacing:-2px;
+}
+
+.balance small{
+    font-size:17px;
+    color:var(--green);
+}
+
+.card-id{
+    color:#697b71;
+    font-size:12px;
+}
+
+.graph{
+    height:110px;
+    margin-top:25px;
+    position:relative;
+    border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.graph svg{
+    width:100%;
+    height:100%;
+}
+
+.card-bottom{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+}
+
+.card-bottom div{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.card-bottom span{
+    font-size:11px;
+    color:#718179;
+}
+
+.card-bottom strong{
+    font-size:15px;
+}
+
+/* FLOAT CARDS */
+
+.float-card{
+    position:absolute;
+    padding:15px 18px;
+    border-radius:17px;
+    background:rgba(9,18,14,.88);
+    backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 20px 50px rgba(0,0,0,.35);
+}
+
+.float-card.one{
+    left:-35px;
+    bottom:55px;
+}
+
+.float-card.two{
+    right:-30px;
+    top:35px;
+}
+
+.float-title{
+    color:#75867d;
+    font-size:10px;
+    margin-bottom:5px;
+}
+
+.float-value{
+    color:var(--green);
+    font-weight:900;
+    font-size:17px;
+}
+
+/* FEATURES */
+
+.section{
+    max-width:1200px;
+    margin:auto;
+    padding:50px 25px 100px;
+}
+
+.section-head{
+    text-align:center;
+    max-width:650px;
+    margin:0 auto 40px;
+}
+
+.section-head .mini{
+    color:var(--green);
+    font-size:12px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    margin-bottom:12px;
+}
+
+.section-head h2{
+    font-size:36px;
+    letter-spacing:-1.5px;
+    margin-bottom:12px;
+}
+
+.section-head p{
+    color:#82938a;
+    line-height:1.6;
+}
+
+.features{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+}
+
+.feature{
+    padding:25px;
+    border:1px solid var(--border);
+    background:linear-gradient(145deg,rgba(13,25,20,.82),rgba(7,14,11,.72));
+    border-radius:21px;
+    transition:.3s;
+}
+
+.feature:hover{
+    transform:translateY(-5px);
+    border-color:rgba(25,245,138,.35);
+}
+
+.feature-icon{
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:rgba(25,245,138,.08);
+    color:var(--green);
+    font-size:21px;
+    margin-bottom:18px;
+}
+
+.feature h3{
+    font-size:18px;
+    margin-bottom:9px;
+}
+
+.feature p{
+    color:#7f9187;
+    line-height:1.55;
+    font-size:14px;
+}
+
+/* STATS */
+
+.stats{
+    max-width:1200px;
+    margin:auto;
+    padding:0 25px 80px;
+}
+
+.stats-box{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    padding:28px;
+    border-radius:22px;
+    border:1px solid rgba(255,255,255,.07);
+    background:rgba(255,255,255,.025);
+}
+
+.stat{
+    text-align:center;
+    padding:10px;
+    border-right:1px solid rgba(255,255,255,.07);
+}
+
+.stat:last-child{
+    border-right:0;
+}
+
+.stat strong{
+    display:block;
+    font-size:29px;
+    color:#fff;
+    margin-bottom:5px;
+}
+
+.stat span{
+    color:#73837b;
+    font-size:12px;
+}
+
+/* CTA */
+
+.cta{
+    max-width:1100px;
+    margin:0 auto 80px;
+    padding:60px 30px;
+    text-align:center;
+    border-radius:28px;
+    border:1px solid rgba(25,245,138,.15);
+    background:
+        radial-gradient(circle at center,rgba(25,245,138,.12),transparent 60%),
+        rgba(10,20,15,.8);
+}
+
+.cta h2{
+    font-size:38px;
+    margin-bottom:13px;
+    letter-spacing:-1px;
+}
+
+.cta p{
+    color:#84958c;
+    margin-bottom:25px;
+}
+
+/* FOOTER */
 
 footer{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  text-align:center;
-  padding:15px;
-  color:#72847a;
-  font-size:12px;
+    border-top:1px solid rgba(255,255,255,.06);
+    padding:30px 20px;
+    text-align:center;
+    color:#586961;
+    font-size:12px;
 }
 
-@media(max-width:600px){
-  h1{
-    font-size:36px;
-  }
+/* MOBILE */
 
-  .hero{
-    min-height:calc(100vh - 70px);
-  }
+@media(max-width:850px){
+
+    .hero{
+        grid-template-columns:1fr;
+        text-align:center;
+        padding-top:55px;
+        gap:50px;
+    }
+
+    .hero-text{
+        margin:auto;
+    }
+
+    .hero-buttons{
+        justify-content:center;
+    }
+
+    .dashboard{
+        max-width:600px;
+        width:100%;
+        margin:auto;
+    }
+
+    .features{
+        grid-template-columns:1fr;
+    }
+
+    .float-card.one{
+        left:0;
+    }
+
+    .float-card.two{
+        right:0;
+    }
+}
+
+@media(max-width:550px){
+
+    header{
+        padding:0 15px;
+    }
+
+    .logo{
+        font-size:20px;
+    }
+
+    .logo-icon{
+        width:34px;
+        height:34px;
+    }
+
+    .header-btn{
+        padding:9px 13px;
+        font-size:13px;
+    }
+
+    .hero{
+        padding:45px 17px 35px;
+    }
+
+    .hero h1{
+        font-size:45px;
+        letter-spacing:-2.5px;
+    }
+
+    .hero-text{
+        font-size:15px;
+    }
+
+    .balance-card{
+        padding:22px;
+    }
+
+    .balance{
+        font-size:35px;
+    }
+
+    .float-card{
+        display:none;
+    }
+
+    .section{
+        padding:40px 17px 70px;
+    }
+
+    .section-head h2{
+        font-size:29px;
+    }
+
+    .stats{
+        padding:0 17px 60px;
+    }
+
+    .stats-box{
+        padding:15px 5px;
+    }
+
+    .stat strong{
+        font-size:22px;
+    }
+
+    .stat span{
+        font-size:10px;
+    }
+
+    .cta{
+        margin:0 17px 60px;
+        padding:45px 20px;
+    }
+
+    .cta h2{
+        font-size:29px;
+    }
 }
 </style>
 </head>
@@ -132,48 +624,296 @@ footer{
 <body>
 
 <header>
-  <div class="logo">QAZANC</div>
 
-  <a class="login" href="#">
-    Giriş
-  </a>
+    <div class="logo">
+        <div class="logo-icon">₼</div>
+        QAZANC<span>.</span>
+    </div>
+
+    <a href="#" class="header-btn">
+        Daxil ol
+    </a>
+
 </header>
+
 
 <section class="hero">
 
-  <div class="content">
+    <div>
 
-    <div class="badge">
-      Qazanc platforması
+        <div class="badge">
+            <span class="badge-dot"></span>
+            QAZANC PLATFORMASI
+        </div>
+
+        <h1>
+            Pulunu və
+            <span>hesabını</span>
+            bir yerdən idarə et.
+        </h1>
+
+        <p class="hero-text">
+            Qazanc hesabınızı rahat şəkildə izləyin,
+            şəxsi məlumatlarınıza və hesab imkanlarınıza
+            müasir və təhlükəsiz interfeys üzərindən daxil olun.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#" class="btn btn-main">
+                Qeydiyyatdan keç →
+            </a>
+
+            <a href="#" class="btn btn-outline">
+                Hesaba daxil ol
+            </a>
+
+        </div>
+
     </div>
 
-    <h1>
-      Qazancını idarə et
-    </h1>
 
-    <p>
-      Şəxsi hesabını yarat, hesab məlumatlarını
-      rahat və təhlükəsiz şəkildə idarə et.
-    </p>
+    <div class="dashboard">
 
-    <div class="buttons">
+        <div class="balance-card">
 
-      <a class="btn primary" href="#">
-        Qeydiyyatdan keç
-      </a>
+            <div class="card-top">
 
-      <a class="btn secondary" href="#">
-        Daxil ol
-      </a>
+                <div class="card-label">
+                    Hesab balansı
+                </div>
+
+                <div class="status">
+                    ● Aktiv
+                </div>
+
+            </div>
+
+            <div class="balance">
+                0.00 <small>AZN</small>
+            </div>
+
+            <div class="card-id">
+                QAZANC • Şəxsi hesab
+            </div>
+
+            <div class="graph">
+
+                <svg viewBox="0 0 500 120"
+                     preserveAspectRatio="none">
+
+                    <defs>
+
+                        <linearGradient
+                            id="area"
+                            x1="0"
+                            y1="0"
+                            x2="0"
+                            y2="1">
+
+                            <stop
+                                offset="0%"
+                                stop-color="#19f58a"
+                                stop-opacity=".28"/>
+
+                            <stop
+                                offset="100%"
+                                stop-color="#19f58a"
+                                stop-opacity="0"/>
+
+                        </linearGradient>
+
+                    </defs>
+
+                    <path
+                        d="M0,100 C55,90 70,95 105,72 C145,45 160,80 195,62 C235,40 250,52 285,45 C325,37 340,55 375,31 C420,2 450,25 500,8 L500,120 L0,120 Z"
+                        fill="url(#area)"/>
+
+                    <path
+                        d="M0,100 C55,90 70,95 105,72 C145,45 160,80 195,62 C235,40 250,52 285,45 C325,37 340,55 375,31 C420,2 450,25 500,8"
+                        fill="none"
+                        stroke="#19f58a"
+                        stroke-width="3"/>
+
+                </svg>
+
+            </div>
+
+            <div class="card-bottom">
+
+                <div>
+                    <span>Hesab</span>
+                    <strong>Aktiv</strong>
+                </div>
+
+                <div>
+                    <span>Valyuta</span>
+                    <strong>AZN</strong>
+                </div>
+
+                <div>
+                    <span>Platforma</span>
+                    <strong>Qazanc</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="float-card one">
+
+            <div class="float-title">
+                Hesab statusu
+            </div>
+
+            <div class="float-value">
+                ● Aktiv
+            </div>
+
+        </div>
+
+
+        <div class="float-card two">
+
+            <div class="float-title">
+                Valyuta
+            </div>
+
+            <div class="float-value">
+                AZN ₼
+            </div>
+
+        </div>
 
     </div>
-
-  </div>
 
 </section>
 
+
+<section class="section">
+
+    <div class="section-head">
+
+        <div class="mini">
+            Qazanc imkanları
+        </div>
+
+        <h2>
+            Hər şey bir paneldə
+        </h2>
+
+        <p>
+            Hesabınızı idarə etmək üçün lazım olan əsas
+            funksiyalar sadə və müasir interfeysdə.
+        </p>
+
+    </div>
+
+
+    <div class="features">
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ₼
+            </div>
+
+            <h3>
+                Şəxsi hesab
+            </h3>
+
+            <p>
+                Hesab məlumatlarınızı və balansınızı
+                bir paneldən izləyin.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ↗
+            </div>
+
+            <h3>
+                Hesab tarixçəsi
+            </h3>
+
+            <p>
+                Hesabınızla bağlı əməliyyat məlumatlarını
+                rahat şəkildə nəzərdən keçirin.
+            </p>
+
+        </div>
+
+
+        <div class="feature">
+
+            <div class="feature-icon">
+                ✓
+            </div>
+
+            <h3>
+                Sadə idarəetmə
+            </h3>
+
+            <p>
+                Mobil telefondan və kompüterdən
+                rahat istifadə üçün hazırlanıb.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="stats">
+
+    <div class="stats-box">
+
+        <div class="stat">
+            <strong>24/7</strong>
+            <span>Hesab əlçatanlığı</span>
+        </div>
+
+        <div class="stat">
+            <strong>AZN</strong>
+            <span>Əsas valyuta</span>
+        </div>
+
+        <div class="stat">
+            <strong>100%</strong>
+            <span>Rəqəmsal idarəetmə</span>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="cta">
+
+    <h2>
+        Qazanc hesabını yarat
+    </h2>
+
+    <p>
+        Platformaya qoşul və şəxsi hesabını idarə etməyə başla.
+    </p>
+
+    <a href="#" class="btn btn-main">
+        Qeydiyyatdan keç →
+    </a>
+
+</section>
+
+
 <footer>
-  © 2026 Qazanc. Bütün hüquqlar qorunur.
+    © 2026 Qazanc. Bütün hüquqlar qorunur.
 </footer>
 
 </body>
