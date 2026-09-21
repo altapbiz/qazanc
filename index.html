@@ -3,918 +3,259 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>QAZANC — Giriş və Qeydiyyat</title>
 
-<title>Qazanc — Rəqəmsal Qazanc Platforması</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-:root{
-    --green:#19f58a;
-    --green2:#0bcf70;
-    --dark:#030806;
-    --card:rgba(13,25,20,.72);
-    --border:rgba(45,255,145,.16);
-    --text:#f5fff9;
-    --muted:#8c9e95;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
+*{box-sizing:border-box;margin:0;padding:0}
 body{
-    font-family:Inter,Arial,sans-serif;
-    background:
-        radial-gradient(circle at 50% -10%,rgba(24,245,126,.18),transparent 35%),
-        radial-gradient(circle at 90% 40%,rgba(0,255,128,.08),transparent 25%),
-        #030806;
-    color:var(--text);
-    min-height:100vh;
-    overflow-x:hidden;
+  font-family:Inter,Arial,sans-serif;
+  min-height:100vh;
+  background:#07100c;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
-
-/* BACKGROUND */
-
-body:before{
-    content:"";
-    position:fixed;
-    width:450px;
-    height:450px;
-    background:rgba(0,255,128,.06);
-    filter:blur(100px);
-    border-radius:50%;
-    top:20%;
-    left:-180px;
-    pointer-events:none;
+.bg{
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(circle at 20% 20%,rgba(0,255,140,.12),transparent 30%),
+    radial-gradient(circle at 80% 80%,rgba(0,255,140,.08),transparent 30%);
+  pointer-events:none;
 }
-
-body:after{
-    content:"";
-    position:fixed;
-    width:400px;
-    height:400px;
-    background:rgba(20,255,130,.05);
-    filter:blur(100px);
-    border-radius:50%;
-    right:-180px;
-    bottom:10%;
-    pointer-events:none;
+.card{
+  position:relative;
+  width:100%;
+  max-width:440px;
+  padding:34px 28px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:28px;
+  background:rgba(12,24,18,.82);
+  backdrop-filter:blur(20px);
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
 }
-
-/* HEADER */
-
-header{
-    height:76px;
-    padding:0 5%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    position:sticky;
-    top:0;
-    z-index:100;
-    background:rgba(3,8,6,.72);
-    backdrop-filter:blur(22px);
-    border-bottom:1px solid rgba(255,255,255,.06);
-}
-
 .logo{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-size:24px;
-    font-weight:900;
-    letter-spacing:-1px;
+  text-align:center;
+  font-size:30px;
+  font-weight:900;
+  letter-spacing:2px;
+  color:#42ff9b;
+  margin-bottom:8px;
 }
-
-.logo-icon{
-    width:38px;
-    height:38px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:linear-gradient(135deg,#20ff91,#087d48);
-    color:#021007;
-    font-weight:1000;
-    box-shadow:0 0 25px rgba(25,245,138,.3);
+.subtitle{
+  text-align:center;
+  color:#8e9d95;
+  margin-bottom:30px;
+  font-size:14px;
 }
-
-.logo span{
-    color:var(--green);
+.tabs{
+  display:flex;
+  background:#08150f;
+  padding:5px;
+  border-radius:14px;
+  margin-bottom:25px;
 }
-
-.header-btn{
-    padding:11px 18px;
-    border-radius:12px;
-    color:#fff;
-    text-decoration:none;
-    border:1px solid rgba(25,245,138,.45);
-    background:rgba(25,245,138,.06);
-    font-weight:700;
-    transition:.25s;
+.tabs button{
+  width:50%;
+  border:0;
+  padding:13px;
+  border-radius:10px;
+  background:transparent;
+  color:#89968f;
+  cursor:pointer;
+  font-weight:700;
 }
-
-.header-btn:hover{
-    background:var(--green);
-    color:#031009;
+.tabs button.active{
+  background:#42ff9b;
+  color:#06100a;
 }
-
-/* HERO */
-
-.hero{
-    max-width:1200px;
-    margin:auto;
-    min-height:680px;
-    padding:80px 25px 50px;
-    display:grid;
-    grid-template-columns:1.1fr .9fr;
-    align-items:center;
-    gap:60px;
+label{
+  display:block;
+  margin:15px 0 7px;
+  color:#b9c6bf;
+  font-size:13px;
 }
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-    padding:9px 14px;
-    border:1px solid rgba(25,245,138,.22);
-    background:rgba(25,245,138,.07);
-    border-radius:50px;
-    color:#75ffb2;
-    font-size:13px;
-    font-weight:700;
-    margin-bottom:22px;
+input{
+  width:100%;
+  padding:15px;
+  border-radius:13px;
+  border:1px solid #26372e;
+  outline:none;
+  background:#09150f;
+  color:#fff;
+  font-size:15px;
 }
-
-.badge-dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:var(--green);
-    box-shadow:0 0 12px var(--green);
+input:focus{
+  border-color:#42ff9b;
 }
-
-.hero h1{
-    font-size:clamp(44px,6vw,76px);
-    line-height:.98;
-    letter-spacing:-4px;
-    max-width:750px;
-    margin-bottom:25px;
+.main-btn{
+  width:100%;
+  margin-top:22px;
+  padding:16px;
+  border:0;
+  border-radius:14px;
+  background:#42ff9b;
+  color:#06100a;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
 }
-
-.hero h1 span{
-    color:var(--green);
-    text-shadow:0 0 35px rgba(25,245,138,.18);
+.main-btn:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
-
-.hero-text{
-    color:#9eaea6;
-    font-size:18px;
-    line-height:1.7;
-    max-width:590px;
+.msg{
+  min-height:22px;
+  text-align:center;
+  margin-top:16px;
+  font-size:13px;
+  color:#8e9d95;
 }
-
-.hero-buttons{
-    display:flex;
-    gap:13px;
-    flex-wrap:wrap;
-    margin-top:32px;
-}
-
-.btn{
-    padding:15px 23px;
-    border-radius:14px;
-    text-decoration:none;
-    font-weight:800;
-    transition:.25s;
-}
-
-.btn-main{
-    color:#031009;
-    background:linear-gradient(135deg,#38ffa0,#12d875);
-    box-shadow:0 10px 35px rgba(25,245,138,.18);
-}
-
-.btn-main:hover{
-    transform:translateY(-2px);
-    box-shadow:0 15px 45px rgba(25,245,138,.3);
-}
-
-.btn-outline{
-    color:#fff;
-    border:1px solid rgba(255,255,255,.12);
-    background:rgba(255,255,255,.035);
-}
-
-.btn-outline:hover{
-    border-color:rgba(25,245,138,.4);
-}
-
-/* DASHBOARD CARD */
-
-.dashboard{
-    position:relative;
-}
-
-.balance-card{
-    position:relative;
-    padding:28px;
-    border-radius:27px;
-    background:
-        linear-gradient(145deg,rgba(25,245,138,.12),rgba(9,18,14,.82));
-    border:1px solid rgba(25,245,138,.18);
-    box-shadow:
-        0 30px 80px rgba(0,0,0,.4),
-        inset 0 1px 0 rgba(255,255,255,.05);
-    overflow:hidden;
-}
-
-.balance-card:before{
-    content:"";
-    position:absolute;
-    width:220px;
-    height:220px;
-    border-radius:50%;
-    background:rgba(25,245,138,.12);
-    filter:blur(70px);
-    right:-80px;
-    top:-80px;
-}
-
-.card-top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    position:relative;
-}
-
-.card-label{
-    color:#91a199;
-    font-size:13px;
-}
-
-.status{
-    padding:6px 10px;
-    border-radius:20px;
-    font-size:11px;
-    color:#67ffac;
-    background:rgba(25,245,138,.09);
-    border:1px solid rgba(25,245,138,.16);
-}
-
-.balance{
-    font-size:42px;
-    font-weight:900;
-    margin:22px 0 5px;
-    letter-spacing:-2px;
-}
-
-.balance small{
-    font-size:17px;
-    color:var(--green);
-}
-
-.card-id{
-    color:#697b71;
-    font-size:12px;
-}
-
-.graph{
-    height:110px;
-    margin-top:25px;
-    position:relative;
-    border-bottom:1px solid rgba(255,255,255,.06);
-}
-
-.graph svg{
-    width:100%;
-    height:100%;
-}
-
-.card-bottom{
-    display:flex;
-    justify-content:space-between;
-    margin-top:20px;
-}
-
-.card-bottom div{
-    display:flex;
-    flex-direction:column;
-    gap:5px;
-}
-
-.card-bottom span{
-    font-size:11px;
-    color:#718179;
-}
-
-.card-bottom strong{
-    font-size:15px;
-}
-
-/* FLOAT CARDS */
-
-.float-card{
-    position:absolute;
-    padding:15px 18px;
-    border-radius:17px;
-    background:rgba(9,18,14,.88);
-    backdrop-filter:blur(20px);
-    border:1px solid rgba(255,255,255,.09);
-    box-shadow:0 20px 50px rgba(0,0,0,.35);
-}
-
-.float-card.one{
-    left:-35px;
-    bottom:55px;
-}
-
-.float-card.two{
-    right:-30px;
-    top:35px;
-}
-
-.float-title{
-    color:#75867d;
-    font-size:10px;
-    margin-bottom:5px;
-}
-
-.float-value{
-    color:var(--green);
-    font-weight:900;
-    font-size:17px;
-}
-
-/* FEATURES */
-
-.section{
-    max-width:1200px;
-    margin:auto;
-    padding:50px 25px 100px;
-}
-
-.section-head{
-    text-align:center;
-    max-width:650px;
-    margin:0 auto 40px;
-}
-
-.section-head .mini{
-    color:var(--green);
-    font-size:12px;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:2px;
-    margin-bottom:12px;
-}
-
-.section-head h2{
-    font-size:36px;
-    letter-spacing:-1.5px;
-    margin-bottom:12px;
-}
-
-.section-head p{
-    color:#82938a;
-    line-height:1.6;
-}
-
-.features{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:18px;
-}
-
-.feature{
-    padding:25px;
-    border:1px solid var(--border);
-    background:linear-gradient(145deg,rgba(13,25,20,.82),rgba(7,14,11,.72));
-    border-radius:21px;
-    transition:.3s;
-}
-
-.feature:hover{
-    transform:translateY(-5px);
-    border-color:rgba(25,245,138,.35);
-}
-
-.feature-icon{
-    width:48px;
-    height:48px;
-    border-radius:14px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    background:rgba(25,245,138,.08);
-    color:var(--green);
-    font-size:21px;
-    margin-bottom:18px;
-}
-
-.feature h3{
-    font-size:18px;
-    margin-bottom:9px;
-}
-
-.feature p{
-    color:#7f9187;
-    line-height:1.55;
-    font-size:14px;
-}
-
-/* STATS */
-
-.stats{
-    max-width:1200px;
-    margin:auto;
-    padding:0 25px 80px;
-}
-
-.stats-box{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    padding:28px;
-    border-radius:22px;
-    border:1px solid rgba(255,255,255,.07);
-    background:rgba(255,255,255,.025);
-}
-
-.stat{
-    text-align:center;
-    padding:10px;
-    border-right:1px solid rgba(255,255,255,.07);
-}
-
-.stat:last-child{
-    border-right:0;
-}
-
-.stat strong{
-    display:block;
-    font-size:29px;
-    color:#fff;
-    margin-bottom:5px;
-}
-
-.stat span{
-    color:#73837b;
-    font-size:12px;
-}
-
-/* CTA */
-
-.cta{
-    max-width:1100px;
-    margin:0 auto 80px;
-    padding:60px 30px;
-    text-align:center;
-    border-radius:28px;
-    border:1px solid rgba(25,245,138,.15);
-    background:
-        radial-gradient(circle at center,rgba(25,245,138,.12),transparent 60%),
-        rgba(10,20,15,.8);
-}
-
-.cta h2{
-    font-size:38px;
-    margin-bottom:13px;
-    letter-spacing:-1px;
-}
-
-.cta p{
-    color:#84958c;
-    margin-bottom:25px;
-}
-
-/* FOOTER */
-
-footer{
-    border-top:1px solid rgba(255,255,255,.06);
-    padding:30px 20px;
-    text-align:center;
-    color:#586961;
-    font-size:12px;
-}
-
-/* MOBILE */
-
-@media(max-width:850px){
-
-    .hero{
-        grid-template-columns:1fr;
-        text-align:center;
-        padding-top:55px;
-        gap:50px;
-    }
-
-    .hero-text{
-        margin:auto;
-    }
-
-    .hero-buttons{
-        justify-content:center;
-    }
-
-    .dashboard{
-        max-width:600px;
-        width:100%;
-        margin:auto;
-    }
-
-    .features{
-        grid-template-columns:1fr;
-    }
-
-    .float-card.one{
-        left:0;
-    }
-
-    .float-card.two{
-        right:0;
-    }
-}
-
-@media(max-width:550px){
-
-    header{
-        padding:0 15px;
-    }
-
-    .logo{
-        font-size:20px;
-    }
-
-    .logo-icon{
-        width:34px;
-        height:34px;
-    }
-
-    .header-btn{
-        padding:9px 13px;
-        font-size:13px;
-    }
-
-    .hero{
-        padding:45px 17px 35px;
-    }
-
-    .hero h1{
-        font-size:45px;
-        letter-spacing:-2.5px;
-    }
-
-    .hero-text{
-        font-size:15px;
-    }
-
-    .balance-card{
-        padding:22px;
-    }
-
-    .balance{
-        font-size:35px;
-    }
-
-    .float-card{
-        display:none;
-    }
-
-    .section{
-        padding:40px 17px 70px;
-    }
-
-    .section-head h2{
-        font-size:29px;
-    }
-
-    .stats{
-        padding:0 17px 60px;
-    }
-
-    .stats-box{
-        padding:15px 5px;
-    }
-
-    .stat strong{
-        font-size:22px;
-    }
-
-    .stat span{
-        font-size:10px;
-    }
-
-    .cta{
-        margin:0 17px 60px;
-        padding:45px 20px;
-    }
-
-    .cta h2{
-        font-size:29px;
-    }
+.back{
+  display:block;
+  text-align:center;
+  margin-top:20px;
+  color:#728079;
+  text-decoration:none;
+  font-size:13px;
 }
 </style>
 </head>
 
 <body>
+<div class="bg"></div>
 
-<header>
+<div class="card">
+  <div class="logo">QAZANC</div>
+  <div class="subtitle">Hesabınıza daxil olun və platformanı istifadə edin</div>
 
-    <div class="logo">
-        <div class="logo-icon">₼</div>
-        QAZANC<span>.</span>
+  <div class="tabs">
+    <button id="loginTab" class="active" onclick="showLogin()">Daxil ol</button>
+    <button id="registerTab" onclick="showRegister()">Qeydiyyat</button>
+  </div>
+
+  <form id="authForm">
+    <div id="nameBox" style="display:none">
+      <label>Ad / istifadəçi adı</label>
+      <input id="name" type="text" placeholder="İstifadəçi adınız">
     </div>
 
-    <a href="#" class="header-btn">
-        Daxil ol
-    </a>
+    <label>E-poçt</label>
+    <input id="email" type="email" placeholder="example@gmail.com" required>
 
-</header>
+    <label>Şifrə</label>
+    <input id="password" type="password" placeholder="••••••••" minlength="6" required>
 
+    <button id="submitBtn" class="main-btn" type="submit">
+      Daxil ol
+    </button>
 
-<section class="hero">
+    <div id="message" class="msg"></div>
+  </form>
 
-    <div>
+  <a class="back" href="https://qazancim.vercel.app/">← Ana səhifəyə qayıt</a>
+</div>
 
-        <div class="badge">
-            <span class="badge-dot"></span>
-            QAZANC PLATFORMASI
-        </div>
+<script>
+const SUPABASE_URL = "https://gefbhrdjddgpdeulmgru.supabase.co";
+const SUPABASE_KEY = "sb_publishable_xopjwCK8Aw2wXUhIuK24Ew_lG5uCYRx";
 
-        <h1>
-            Pulunu və
-            <span>hesabını</span>
-            bir yerdən idarə et.
-        </h1>
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
-        <p class="hero-text">
-            Qazanc hesabınızı rahat şəkildə izləyin,
-            şəxsi məlumatlarınıza və hesab imkanlarınıza
-            müasir və təhlükəsiz interfeys üzərindən daxil olun.
-        </p>
+let mode = "login";
 
-        <div class="hero-buttons">
+function showLogin(){
+  mode = "login";
 
-            <a href="#" class="btn btn-main">
-                Qeydiyyatdan keç →
-            </a>
+  document.getElementById("loginTab").classList.add("active");
+  document.getElementById("registerTab").classList.remove("active");
 
-            <a href="#" class="btn btn-outline">
-                Hesaba daxil ol
-            </a>
+  document.getElementById("nameBox").style.display = "none";
+  document.getElementById("submitBtn").textContent = "Daxil ol";
+  document.getElementById("message").textContent = "";
+}
 
-        </div>
+function showRegister(){
+  mode = "register";
 
-    </div>
+  document.getElementById("registerTab").classList.add("active");
+  document.getElementById("loginTab").classList.remove("active");
 
+  document.getElementById("nameBox").style.display = "block";
+  document.getElementById("submitBtn").textContent = "Qeydiyyatdan keç";
+  document.getElementById("message").textContent = "";
+}
 
-    <div class="dashboard">
+document.getElementById("authForm").addEventListener("submit", async function(e){
+  e.preventDefault();
 
-        <div class="balance-card">
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const name = document.getElementById("name").value.trim();
 
-            <div class="card-top">
+  const btn = document.getElementById("submitBtn");
+  const msg = document.getElementById("message");
 
-                <div class="card-label">
-                    Hesab balansı
-                </div>
+  btn.disabled = true;
+  msg.textContent = "Gözləyin...";
 
-                <div class="status">
-                    ● Aktiv
-                </div>
+  if(mode === "register"){
 
-            </div>
+    if(!name){
+      msg.textContent = "İstifadəçi adını daxil edin.";
+      btn.disabled = false;
+      return;
+    }
 
-            <div class="balance">
-                0.00 <small>AZN</small>
-            </div>
+    const { data, error } = await client.auth.signUp({
+      email: email,
+      password: password,
+      options:{
+        data:{
+          username:name
+        }
+      }
+    });
 
-            <div class="card-id">
-                QAZANC • Şəxsi hesab
-            </div>
+    if(error){
+      msg.textContent = error.message;
+      btn.disabled = false;
+      return;
+    }
 
-            <div class="graph">
+    msg.textContent = "Qeydiyyat uğurla tamamlandı.";
 
-                <svg viewBox="0 0 500 120"
-                     preserveAspectRatio="none">
+    if(data.session){
+      window.location.href = "dashboard.html";
+    }
 
-                    <defs>
+  }else{
 
-                        <linearGradient
-                            id="area"
-                            x1="0"
-                            y1="0"
-                            x2="0"
-                            y2="1">
+    const { data, error } = await client.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
 
-                            <stop
-                                offset="0%"
-                                stop-color="#19f58a"
-                                stop-opacity=".28"/>
-
-                            <stop
-                                offset="100%"
-                                stop-color="#19f58a"
-                                stop-opacity="0"/>
-
-                        </linearGradient>
-
-                    </defs>
-
-                    <path
-                        d="M0,100 C55,90 70,95 105,72 C145,45 160,80 195,62 C235,40 250,52 285,45 C325,37 340,55 375,31 C420,2 450,25 500,8 L500,120 L0,120 Z"
-                        fill="url(#area)"/>
-
-                    <path
-                        d="M0,100 C55,90 70,95 105,72 C145,45 160,80 195,62 C235,40 250,52 285,45 C325,37 340,55 375,31 C420,2 450,25 500,8"
-                        fill="none"
-                        stroke="#19f58a"
-                        stroke-width="3"/>
-
-                </svg>
-
-            </div>
-
-            <div class="card-bottom">
-
-                <div>
-                    <span>Hesab</span>
-                    <strong>Aktiv</strong>
-                </div>
-
-                <div>
-                    <span>Valyuta</span>
-                    <strong>AZN</strong>
-                </div>
-
-                <div>
-                    <span>Platforma</span>
-                    <strong>Qazanc</strong>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="float-card one">
-
-            <div class="float-title">
-                Hesab statusu
-            </div>
-
-            <div class="float-value">
-                ● Aktiv
-            </div>
-
-        </div>
-
-
-        <div class="float-card two">
-
-            <div class="float-title">
-                Valyuta
-            </div>
-
-            <div class="float-value">
-                AZN ₼
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section class="section">
-
-    <div class="section-head">
-
-        <div class="mini">
-            Qazanc imkanları
-        </div>
-
-        <h2>
-            Hər şey bir paneldə
-        </h2>
-
-        <p>
-            Hesabınızı idarə etmək üçün lazım olan əsas
-            funksiyalar sadə və müasir interfeysdə.
-        </p>
-
-    </div>
-
-
-    <div class="features">
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                ₼
-            </div>
-
-            <h3>
-                Şəxsi hesab
-            </h3>
-
-            <p>
-                Hesab məlumatlarınızı və balansınızı
-                bir paneldən izləyin.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                ↗
-            </div>
-
-            <h3>
-                Hesab tarixçəsi
-            </h3>
-
-            <p>
-                Hesabınızla bağlı əməliyyat məlumatlarını
-                rahat şəkildə nəzərdən keçirin.
-            </p>
-
-        </div>
-
-
-        <div class="feature">
-
-            <div class="feature-icon">
-                ✓
-            </div>
-
-            <h3>
-                Sadə idarəetmə
-            </h3>
-
-            <p>
-                Mobil telefondan və kompüterdən
-                rahat istifadə üçün hazırlanıb.
-            </p>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section class="stats">
-
-    <div class="stats-box">
-
-        <div class="stat">
-            <strong>24/7</strong>
-            <span>Hesab əlçatanlığı</span>
-        </div>
-
-        <div class="stat">
-            <strong>AZN</strong>
-            <span>Əsas valyuta</span>
-        </div>
-
-        <div class="stat">
-            <strong>100%</strong>
-            <span>Rəqəmsal idarəetmə</span>
-        </div>
-
-    </div>
-
-</section>
-
-
-<section class="cta">
-
-    <h2>
-        Qazanc hesabını yarat
-    </h2>
-
-    <p>
-        Platformaya qoşul və şəxsi hesabını idarə etməyə başla.
-    </p>
-
-    <a href="#" class="btn btn-main">
-        Qeydiyyatdan keç →
-    </a>
-
-</section>
-
-
-<footer>
-    © 2026 Qazanc. Bütün hüquqlar qorunur.
-</footer>
+    if(error){
+      msg.textContent = "E-poçt və ya şifrə yanlışdır.";
+      btn.disabled = false;
+      return;
+    }
+
+    msg.textContent = "Giriş uğurludur...";
+    window.location.href = "dashboard.html";
+  }
+
+  btn.disabled = false;
+});
+</script>
 
 </body>
 </html>
