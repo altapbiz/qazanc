@@ -3,235 +3,297 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Ödənişlər — Qazanc</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
     }
 
-    body {
-      min-height: 100vh;
-      font-family: Inter, Arial, sans-serif;
-      color: #fff;
+    body{
+      min-height:100vh;
+      font-family:Inter,Arial,sans-serif;
+      color:#fff;
       background:
-        radial-gradient(circle at top left, #18345c 0, transparent 35%),
-        radial-gradient(circle at bottom right, #102c25 0, transparent 35%),
+        radial-gradient(circle at top left,#18345c 0,transparent 35%),
+        radial-gradient(circle at bottom right,#102c25 0,transparent 35%),
         #070b12;
-      padding: 25px 16px;
+      padding:25px 16px;
     }
 
-    .container {
-      width: 100%;
-      max-width: 700px;
-      margin: auto;
+    .container{
+      width:100%;
+      max-width:700px;
+      margin:auto;
     }
 
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 25px;
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:25px;
     }
 
-    .back {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: #aeb9c9;
-      text-decoration: none;
-      font-size: 14px;
+    .back{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      color:#aeb9c9;
+      text-decoration:none;
+      font-size:14px;
     }
 
-    .back:hover {
-      color: #fff;
+    .back:hover{
+      color:#fff;
     }
 
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 1px;
+    .logo{
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:1px;
     }
 
-    .card {
-      background: rgba(15, 22, 34, .80);
-      border: 1px solid rgba(255,255,255,.08);
-      border-radius: 24px;
-      padding: 28px;
-      box-shadow: 0 20px 60px rgba(0,0,0,.35);
-      backdrop-filter: blur(20px);
+    .card{
+      background:rgba(15,22,34,.80);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:24px;
+      padding:28px;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      backdrop-filter:blur(20px);
     }
 
-    .header {
-      text-align: center;
-      padding-bottom: 25px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+    .header{
+      text-align:center;
+      padding-bottom:25px;
+      border-bottom:1px solid rgba(255,255,255,.08);
     }
 
-    .icon {
-      width: 70px;
-      height: 70px;
-      margin: auto;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(135deg,#247cff,#19c98a);
+    .icon{
+      width:70px;
+      height:70px;
+      margin:auto;
+      border-radius:20px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,#247cff,#19c98a);
     }
 
-    .icon svg {
-      width: 34px;
-      height: 34px;
+    .icon svg{
+      width:34px;
+      height:34px;
     }
 
-    h1 {
-      margin-top: 15px;
-      font-size: 25px;
+    h1{
+      margin-top:15px;
+      font-size:25px;
     }
 
-    .subtitle {
-      margin-top: 7px;
-      color: #8996a9;
-      font-size: 13px;
+    .subtitle{
+      margin-top:7px;
+      color:#8996a9;
+      font-size:13px;
     }
 
-    .section {
-      margin-top: 27px;
+    .section{
+      margin-top:27px;
     }
 
-    .section-title {
-      font-size: 15px;
-      font-weight: 700;
-      margin-bottom: 13px;
+    .section-title{
+      font-size:15px;
+      font-weight:700;
+      margin-bottom:13px;
+    }
+
+    .request-box{
+      padding:20px;
+      border-radius:17px;
+      background:#0b111b;
+      border:1px solid rgba(255,255,255,.07);
+      margin-bottom:25px;
+    }
+
+    .request-title{
+      font-size:14px;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .input{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.09);
+      background:#070c14;
+      color:#fff;
+      outline:none;
+      font-size:14px;
+    }
+
+    .input:focus{
+      border-color:#247cff;
+    }
+
+    .request-btn{
+      width:100%;
+      margin-top:12px;
+      padding:14px;
+      border:0;
+      border-radius:12px;
+      background:linear-gradient(135deg,#247cff,#19c98a);
+      color:#fff;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:700;
+    }
+
+    .request-btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .message{
+      margin-top:12px;
+      padding:12px;
+      border-radius:10px;
+      display:none;
+      font-size:12px;
+      line-height:1.5;
+    }
+
+    .success{
+      display:block;
+      color:#7ff0bd;
+      background:rgba(25,201,138,.08);
+      border:1px solid rgba(25,201,138,.18);
+    }
+
+    .error{
+      display:block;
+      color:#ff8585;
+      background:rgba(255,70,70,.06);
+      border:1px solid rgba(255,70,70,.18);
     }
 
     .loading,
-    .empty,
-    .error {
-      padding: 20px;
-      text-align: center;
-      border-radius: 15px;
-      background: rgba(255,255,255,.035);
-      color: #8996a9;
-      font-size: 13px;
-      line-height: 1.6;
+    .empty{
+      padding:20px;
+      text-align:center;
+      border-radius:15px;
+      background:rgba(255,255,255,.035);
+      color:#8996a9;
+      font-size:13px;
+      line-height:1.6;
     }
 
-    .error {
-      color: #ff8585;
-      border: 1px solid rgba(255,70,70,.18);
-      word-break: break-word;
+    .payment{
+      padding:17px;
+      margin-bottom:10px;
+      border-radius:15px;
+      background:#0b111b;
+      border:1px solid rgba(255,255,255,.07);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:15px;
     }
 
-    .payment {
-      padding: 17px;
-      margin-bottom: 10px;
-      border-radius: 15px;
-      background: #0b111b;
-      border: 1px solid rgba(255,255,255,.07);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
+    .payment-left{
+      display:flex;
+      align-items:center;
+      gap:13px;
+      min-width:0;
     }
 
-    .payment-left {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      min-width: 0;
+    .payment-icon{
+      width:42px;
+      height:42px;
+      min-width:42px;
+      border-radius:12px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(36,124,255,.10);
+      color:#5b9cff;
     }
 
-    .payment-icon {
-      width: 42px;
-      height: 42px;
-      min-width: 42px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(36,124,255,.10);
-      color: #5b9cff;
+    .payment-icon svg{
+      width:21px;
+      height:21px;
     }
 
-    .payment-icon svg {
-      width: 21px;
-      height: 21px;
+    .payment-title{
+      font-size:14px;
+      font-weight:600;
     }
 
-    .payment-title {
-      font-size: 14px;
-      font-weight: 600;
+    .status{
+      display:inline-block;
+      margin-top:6px;
+      padding:4px 8px;
+      border-radius:7px;
+      background:rgba(255,255,255,.06);
+      color:#8996a9;
+      font-size:10px;
     }
 
-    .status {
-      display: inline-block;
-      margin-top: 6px;
-      padding: 4px 8px;
-      border-radius: 7px;
-      background: rgba(255,255,255,.06);
-      color: #8996a9;
-      font-size: 10px;
+    .amount{
+      font-size:16px;
+      font-weight:700;
+      white-space:nowrap;
     }
 
-    .amount {
-      font-size: 16px;
-      font-weight: 700;
-      white-space: nowrap;
+    .info{
+      margin-top:25px;
+      padding:15px;
+      border-radius:14px;
+      background:rgba(255,255,255,.035);
+      border:1px solid rgba(255,255,255,.06);
+      color:#7f8ca0;
+      font-size:12px;
+      line-height:1.6;
     }
 
-    .info {
-      margin-top: 25px;
-      padding: 15px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.035);
-      border: 1px solid rgba(255,255,255,.06);
-      color: #7f8ca0;
-      font-size: 12px;
-      line-height: 1.6;
+    .logout{
+      width:100%;
+      margin-top:14px;
+      padding:14px;
+      border-radius:13px;
+      border:1px solid rgba(255,255,255,.09);
+      background:#0b111b;
+      color:#d5dce7;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:9px;
+      font-size:14px;
+      font-weight:600;
     }
 
-    .logout {
-      width: 100%;
-      margin-top: 14px;
-      padding: 14px;
-      border-radius: 13px;
-      border: 1px solid rgba(255,255,255,.09);
-      background: #0b111b;
-      color: #d5dce7;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      font-size: 14px;
-      font-weight: 600;
+    .logout:hover{
+      background:#111a28;
     }
 
-    .logout:hover {
-      background: #111a28;
-    }
-
-    @media(max-width:500px) {
-      .card {
-        padding: 21px;
+    @media(max-width:500px){
+      .card{
+        padding:21px;
       }
 
-      h1 {
-        font-size: 22px;
+      h1{
+        font-size:22px;
       }
 
-      .payment {
-        padding: 14px;
+      .payment{
+        padding:14px;
       }
 
-      .amount {
-        font-size: 14px;
+      .amount{
+        font-size:14px;
       }
     }
   </style>
@@ -244,43 +306,33 @@
   <div class="topbar">
 
     <a href="dashboard.html" class="back">
-
       <svg width="18" height="18"
            viewBox="0 0 24 24"
            fill="none"
            stroke="currentColor"
            stroke-width="2">
-
         <path d="M15 18l-6-6 6-6"/>
-
       </svg>
-
       Kabinetə qayıt
-
     </a>
 
     <div class="logo">QAZANC</div>
 
   </div>
 
-
   <div class="card">
 
     <div class="header">
 
       <div class="icon">
-
         <svg viewBox="0 0 24 24"
              fill="none"
              stroke="white"
              stroke-width="1.8">
-
           <rect x="3" y="5" width="18" height="14" rx="2"/>
           <path d="M3 10h18"/>
           <path d="M7 15h4"/>
-
         </svg>
-
       </div>
 
       <h1>Ödənişlər</h1>
@@ -295,15 +347,47 @@
     <div class="section">
 
       <div class="section-title">
+        Yeni ödəniş sorğusu
+      </div>
+
+      <div class="request-box">
+
+        <div class="request-title">
+          Sorğu məbləği
+        </div>
+
+        <input
+          id="amountInput"
+          class="input"
+          type="number"
+          min="1"
+          step="0.01"
+          placeholder="Məbləği AZN ilə daxil edin"
+        >
+
+        <button
+          id="requestBtn"
+          class="request-btn">
+          Ödəniş sorğusu yarat
+        </button>
+
+        <div id="message" class="message"></div>
+
+      </div>
+
+    </div>
+
+
+    <div class="section">
+
+      <div class="section-title">
         Ödəniş tarixçəsi
       </div>
 
       <div id="list">
-
         <div class="loading">
           Məlumatlar yüklənir...
         </div>
-
       </div>
 
     </div>
@@ -321,11 +405,9 @@
            fill="none"
            stroke="currentColor"
            stroke-width="2">
-
         <path d="M10 17l5-5-5-5"/>
         <path d="M15 12H3"/>
         <path d="M21 19V5a2 2 0 0 0-2-2h-7"/>
-
       </svg>
 
       Hesabdan çıxış
@@ -352,43 +434,164 @@ const client =
   );
 
 
-async function loadPayments() {
+let currentUser = null;
+
+
+async function getCurrentUser(){
+
+  const {
+    data,
+    error
+  } = await client.auth.getUser();
+
+  if(error || !data || !data.user){
+
+    window.location.href = "index.html";
+    return null;
+
+  }
+
+  currentUser = data.user;
+
+  return data.user;
+
+}
+
+
+function showMessage(text,type){
+
+  const message =
+    document.getElementById("message");
+
+  message.textContent = text;
+
+  message.className =
+    "message " + type;
+
+}
+
+
+async function createPaymentRequest(){
+
+  const input =
+    document.getElementById("amountInput");
+
+  const button =
+    document.getElementById("requestBtn");
+
+  const amount =
+    Number(input.value);
+
+
+  if(!amount || amount <= 0){
+
+    showMessage(
+      "Zəhmət olmasa düzgün məbləğ daxil edin.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  if(!currentUser){
+
+    showMessage(
+      "İstifadəçi hesabı tapılmadı.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "Sorğu yaradılır...";
+
+
+  try{
+
+    const {
+      error
+    } = await client
+      .from("odenisler")
+      .insert({
+        istifadeci_id: currentUser.id,
+        mebleg: amount,
+        status: "gozleyir"
+      });
+
+
+    if(error){
+
+      console.error(
+        "Ödəniş sorğusu xətası:",
+        error
+      );
+
+      showMessage(
+        "Sorğu yaradılmadı: " +
+        error.message,
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    showMessage(
+      "Ödəniş sorğunuz uğurla yaradıldı.",
+      "success"
+    );
+
+
+    input.value = "";
+
+    await loadPayments();
+
+
+  }catch(err){
+
+    console.error(err);
+
+    showMessage(
+      "Xəta baş verdi: " +
+      (err.message || err),
+      "error"
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "Ödəniş sorğusu yarat";
+
+  }
+
+}
+
+
+async function loadPayments(){
 
   const list =
     document.getElementById("list");
 
 
-  try {
+  try{
 
-    const {
-      data: userData,
-      error: userError
-    } = await client.auth.getUser();
+    const user =
+      await getCurrentUser();
 
 
-    if (userError) {
-
-      list.innerHTML =
-        '<div class="error">' +
-        'Hesab məlumatı alınmadı: ' +
-        userError.message +
-        '</div>';
-
+    if(!user){
       return;
     }
-
-
-    if (!userData || !userData.user) {
-
-      window.location.href =
-        "index.html";
-
-      return;
-    }
-
-
-    const userId =
-      userData.user.id;
 
 
     const {
@@ -397,13 +600,13 @@ async function loadPayments() {
     } = await client
       .from("odenisler")
       .select("id, mebleg, status")
-      .eq("istifadeci_id", userId)
+      .eq("istifadeci_id", user.id)
       .order("id", {
-        ascending: false
+        ascending:false
       });
 
 
-    if (error) {
+    if(error){
 
       console.error(
         "Supabase ödəniş xətası:",
@@ -417,10 +620,11 @@ async function loadPayments() {
         '</div>';
 
       return;
+
     }
 
 
-    if (!data || data.length === 0) {
+    if(!data || data.length === 0){
 
       list.innerHTML =
         '<div class="empty">' +
@@ -428,6 +632,7 @@ async function loadPayments() {
         '</div>';
 
       return;
+
     }
 
 
@@ -476,7 +681,6 @@ async function loadPayments() {
 
           </div>
 
-
           <div>
 
             <div class="payment-title">
@@ -491,7 +695,6 @@ async function loadPayments() {
 
         </div>
 
-
         <div class="amount">
           ${amount} AZN
         </div>
@@ -504,12 +707,9 @@ async function loadPayments() {
     });
 
 
-  } catch (err) {
+  }catch(err){
 
-    console.error(
-      "Gözlənilməz xəta:",
-      err
-    );
+    console.error(err);
 
     list.innerHTML =
       '<div class="error">' +
@@ -522,10 +722,16 @@ async function loadPayments() {
 }
 
 
-loadPayments();
+document
+  .getElementById("requestBtn")
+  .addEventListener(
+    "click",
+    createPaymentRequest
+  );
 
 
-document.getElementById("logoutBtn")
+document
+  .getElementById("logoutBtn")
   .addEventListener(
     "click",
     async () => {
@@ -537,6 +743,9 @@ document.getElementById("logoutBtn")
 
     }
   );
+
+
+loadPayments();
 
 </script>
 
