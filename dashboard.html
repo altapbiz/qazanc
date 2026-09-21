@@ -3,116 +3,287 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>QAZANC — Kabinet</title>
-
+<title>QAZANC — Şəxsi kabinet</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
+
 body{
-  font-family:Arial,sans-serif;
-  min-height:100vh;
-  background:#07100c;
-  color:#fff;
+font-family:Inter,Arial,sans-serif;
+background:#060b08;
+color:#fff;
+min-height:100vh;
 }
+
+body:before{
+content:"";
+position:fixed;
+width:500px;
+height:500px;
+top:-200px;
+left:-150px;
+background:#16e982;
+opacity:.07;
+filter:blur(120px);
+border-radius:50%;
+pointer-events:none;
+}
+
 header{
-  height:70px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 6%;
-  border-bottom:1px solid rgba(255,255,255,.08);
-  background:rgba(7,16,12,.9);
+height:76px;
+border-bottom:1px solid rgba(255,255,255,.07);
+background:rgba(6,11,8,.88);
+backdrop-filter:blur(20px);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 6%;
+position:sticky;
+top:0;
+z-index:10;
 }
+
 .logo{
-  color:#42ff9b;
-  font-size:25px;
-  font-weight:900;
-  letter-spacing:2px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:25px;
+font-weight:900;
+letter-spacing:2px;
+color:#42ff9b;
 }
+
+.logo-icon{
+width:35px;
+height:35px;
+border-radius:10px;
+background:#42ff9b;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#06100a;
+}
+
+.logo-icon svg{
+width:21px;
+height:21px;
+}
+
 .logout{
-  border:1px solid #294236;
-  background:#0b1811;
-  color:#fff;
-  padding:10px 16px;
-  border-radius:10px;
-  cursor:pointer;
+display:flex;
+align-items:center;
+gap:8px;
+padding:11px 16px;
+border:1px solid #26372e;
+background:#0b1510;
+color:#dce8e1;
+border-radius:12px;
+cursor:pointer;
+font-weight:700;
 }
+
+.logout svg{
+width:18px;
+height:18px;
+}
+
 main{
-  width:90%;
-  max-width:1100px;
-  margin:35px auto;
+width:90%;
+max-width:1180px;
+margin:38px auto 60px;
 }
+
 .welcome{
-  margin-bottom:25px;
+margin-bottom:28px;
 }
+
 .welcome h1{
-  font-size:30px;
-  margin-bottom:7px;
+font-size:31px;
+margin-bottom:8px;
+letter-spacing:-.7px;
 }
+
 .welcome p{
-  color:#87968d;
+color:#7f9187;
+font-size:14px;
 }
+
 .balance{
-  padding:30px;
-  border-radius:24px;
-  background:linear-gradient(135deg,#10251a,#0a1710);
-  border:1px solid rgba(66,255,155,.18);
-  box-shadow:0 20px 60px rgba(0,0,0,.3);
+position:relative;
+overflow:hidden;
+padding:30px;
+border-radius:25px;
+border:1px solid rgba(66,255,155,.15);
+background:
+linear-gradient(135deg,rgba(19,43,30,.95),rgba(8,18,13,.96));
+box-shadow:0 25px 70px rgba(0,0,0,.35);
 }
-.balance small{
-  color:#8d9d94;
+
+.balance:after{
+content:"";
+position:absolute;
+width:280px;
+height:280px;
+right:-120px;
+top:-150px;
+border-radius:50%;
+background:#42ff9b;
+opacity:.06;
+filter:blur(20px);
 }
+
+.balance-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+position:relative;
+z-index:1;
+}
+
+.balance-label{
+display:flex;
+align-items:center;
+gap:10px;
+color:#8ea198;
+font-size:14px;
+}
+
+.balance-label svg{
+width:20px;
+height:20px;
+color:#42ff9b;
+}
+
 .amount{
-  font-size:43px;
-  font-weight:900;
-  margin:10px 0;
-  color:#42ff9b;
+font-size:45px;
+font-weight:900;
+margin:14px 0 7px;
+color:#42ff9b;
+letter-spacing:-1px;
+position:relative;
+z-index:1;
 }
+
+.balance-sub{
+color:#73847b;
+font-size:13px;
+position:relative;
+z-index:1;
+}
+
 .grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px;
-  margin-top:20px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:18px;
+margin-top:20px;
 }
+
 .box{
-  padding:23px;
-  background:#0c1912;
-  border:1px solid #1c3025;
-  border-radius:20px;
+padding:24px;
+border-radius:21px;
+background:rgba(11,22,16,.85);
+border:1px solid #1b2d23;
+transition:.2s;
 }
+
+.box:hover{
+transform:translateY(-3px);
+border-color:#31533f;
+}
+
+.icon{
+width:46px;
+height:46px;
+border-radius:14px;
+background:#102319;
+display:flex;
+align-items:center;
+justify-content:center;
+margin-bottom:18px;
+color:#42ff9b;
+}
+
+.icon svg{
+width:23px;
+height:23px;
+}
+
 .box h3{
-  margin-bottom:9px;
+font-size:17px;
+margin-bottom:8px;
 }
+
 .box p{
-  color:#829088;
-  font-size:14px;
-  line-height:1.5;
+color:#7f9087;
+font-size:13px;
+line-height:1.55;
+min-height:40px;
 }
+
 .btn{
-  display:block;
-  width:100%;
-  margin-top:18px;
-  padding:13px;
-  border:0;
-  border-radius:12px;
-  background:#42ff9b;
-  color:#06100a;
-  font-weight:900;
-  cursor:pointer;
+width:100%;
+margin-top:18px;
+padding:13px;
+border:1px solid #294437;
+border-radius:12px;
+background:#0d1c14;
+color:#d9e8df;
+font-weight:800;
+cursor:pointer;
+transition:.2s;
 }
+
+.btn:hover{
+background:#42ff9b;
+color:#06100a;
+border-color:#42ff9b;
+}
+
 .notice{
-  margin-top:22px;
-  padding:17px;
-  border-radius:15px;
-  background:#0b1811;
-  color:#8d9d94;
-  font-size:13px;
-  line-height:1.5;
+margin-top:22px;
+padding:18px 20px;
+display:flex;
+align-items:flex-start;
+gap:12px;
+border:1px solid #1d3026;
+border-radius:17px;
+background:#09140e;
+color:#788980;
+font-size:13px;
+line-height:1.55;
 }
-@media(max-width:700px){
-  .grid{grid-template-columns:1fr}
-  .amount{font-size:35px}
+
+.notice svg{
+width:20px;
+height:20px;
+min-width:20px;
+color:#42ff9b;
+}
+
+@media(max-width:760px){
+header{padding:0 5%}
+
+main{
+width:92%;
+margin-top:27px;
+}
+
+.grid{
+grid-template-columns:1fr;
+}
+
+.welcome h1{
+font-size:27px;
+}
+
+.amount{
+font-size:38px;
+}
+
+.balance{
+padding:24px;
+}
 }
 </style>
 </head>
@@ -120,53 +291,131 @@ main{
 <body>
 
 <header>
-  <div class="logo">QAZANC</div>
-  <button class="logout" onclick="logout()">Çıxış</button>
+
+<div class="logo">
+<div class="logo-icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+<path d="M12 3v18"/>
+<path d="M17 7.5c0-1.7-1.9-3-5-3s-5 1.3-5 3 1.9 3 5 3 5 1.3 5 3-1.9 3-5 3-5-1.3-5-3"/>
+</svg>
+</div>
+QAZANC
+</div>
+
+<button class="logout" onclick="logout()">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M10 17l5-5-5-5"/>
+<path d="M15 12H3"/>
+<path d="M21 19V5a2 2 0 0 0-2-2h-6"/>
+</svg>
+Çıxış
+</button>
+
 </header>
 
 <main>
 
-  <section class="welcome">
-    <h1>Xoş gəlmisiniz 👋</h1>
-    <p id="userEmail">Hesab məlumatları yüklənir...</p>
-  </section>
+<section class="welcome">
+<h1>Xoş gəlmisiniz</h1>
+<p id="userEmail">Hesab məlumatları yüklənir...</p>
+</section>
 
-  <section class="balance">
-    <small>Hesab balansı</small>
-    <div class="amount">0.00 AZN</div>
-    <small>Balans məlumatı hesabınızdan göstərilir.</small>
-  </section>
+<section class="balance">
 
-  <div class="grid">
+<div class="balance-top">
+<div class="balance-label">
 
-    <div class="box">
-      <h3>👤 Profil</h3>
-      <p>Hesab və istifadəçi məlumatlarınızı idarə edin.</p>
-      <button class="btn">Profil</button>
-    </div>
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="5" width="18" height="14" rx="2"/>
+<path d="M3 10h18"/>
+</svg>
 
-    <div class="box">
-      <h3>💰 Qazanc</h3>
-      <p>Hesab üzrə qazanc məlumatlarınıza baxın.</p>
-      <button class="btn">Qazanclarım</button>
-    </div>
+Hesab balansı
 
-    <div class="box">
-      <h3>💳 Ödənişlər</h3>
-      <p>Ödəniş sorğularınızı və tarixçənizi izləyin.</p>
-      <button class="btn">Ödənişlər</button>
-    </div>
+</div>
+</div>
 
-  </div>
+<div class="amount">0.00 AZN</div>
 
-  <div class="notice">
-    Qeyd: Bu kabinet hazırda hesab və interfeys mərhələsindədir.
-    Maliyyə əməliyyatları avtomatik həyata keçirilmir.
-  </div>
+<div class="balance-sub">
+Balans məlumatı hesabınızdan göstərilir.
+</div>
+
+</section>
+
+<div class="grid">
+
+<div class="box">
+
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="8" r="4"/>
+<path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/>
+</svg>
+</div>
+
+<h3>Profil</h3>
+<p>Şəxsi hesab və istifadəçi məlumatlarınızı idarə edin.</p>
+
+<button class="btn">Profilə keç</button>
+
+</div>
+
+<div class="box">
+
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<path d="M6 2h12v20H6z"/>
+<path d="M9 6h6"/>
+<path d="M9 10h6"/>
+<path d="M9 14h3"/>
+</svg>
+</div>
+
+<h3>Qazanc</h3>
+<p>Hesabınız üzrə qazanc məlumatlarını izləyin.</p>
+
+<button class="btn">Qazancları gör</button>
+
+</div>
+
+<div class="box">
+
+<div class="icon">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="2" y="5" width="20" height="14" rx="2"/>
+<path d="M2 10h20"/>
+<path d="M6 15h4"/>
+</svg>
+</div>
+
+<h3>Ödənişlər</h3>
+<p>Ödəniş sorğularınızı və əməliyyat tarixçənizi izləyin.</p>
+
+<button class="btn">Ödənişlərə bax</button>
+
+</div>
+
+</div>
+
+<div class="notice">
+
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="9"/>
+<path d="M12 10v6"/>
+<path d="M12 7h.01"/>
+</svg>
+
+<div>
+Hesab məlumatları təhlükəsiz şəkildə hesabınıza bağlıdır.
+</div>
+
+</div>
 
 </main>
 
 <script>
+
 const SUPABASE_URL =
 "https://gefbhrdjddgpdeulmgru.supabase.co";
 
@@ -174,31 +423,34 @@ const SUPABASE_KEY =
 "sb_publishable_xopjwCK8Aw2wXUhIuK24Ew_lG5uCYRx";
 
 const client = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 async function checkUser(){
 
-  const {data,error} = await client.auth.getUser();
+const {data,error} = await client.auth.getUser();
 
-  if(error || !data.user){
-    window.location.href = "index.html";
-    return;
-  }
+if(error || !data.user){
+window.location.href="index.html";
+return;
+}
 
-  document.getElementById("userEmail").textContent =
-    data.user.email;
+document.getElementById("userEmail").textContent =
+data.user.email;
+
 }
 
 async function logout(){
 
-  await client.auth.signOut();
+await client.auth.signOut();
 
-  window.location.href = "index.html";
+window.location.href="index.html";
+
 }
 
 checkUser();
+
 </script>
 
 </body>
