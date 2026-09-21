@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel — Qazanc</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  min-height:100vh;
+  font-family:Inter,Arial,sans-serif;
+  color:#fff;
+  background:
+    radial-gradient(circle at top left,#18345c 0,transparent 35%),
+    radial-gradient(circle at bottom right,#102c25 0,transparent 35%),
+    #070b12;
+  padding:25px 16px;
+}
+.container{max-width:900px;margin:auto}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:25px;
+}
+.logo{font-size:22px;font-weight:800;letter-spacing:1px}
+.back{
+  color:#aeb9c9;
+  text-decoration:none;
+  font-size:14px;
+}
+.card{
+  background:rgba(15,22,34,.82);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
+  backdrop-filter:blur(20px);
+}
+h1{font-size:26px}
+.subtitle{
+  margin-top:7px;
+  color:#8996a9;
+  font-size:13px;
+}
+.section{margin-top:28px}
+.title{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:14px;
+}
+.loading,.empty,.error{
+  padding:20px;
+  text-align:center;
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  color:#8996a9;
+  font-size:13px;
+}
+.error{
+  color:#ff8585;
+  border:1px solid rgba(255,70,70,.18);
+}
+.request{
+  padding:18px;
+  margin-bottom:10px;
+  border-radius:16px;
+  background:#0b111b;
+  border:1px solid rgba(255,255,255,.07);
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+}
+.label{
+  color:#8996a9;
+  font-size:11px;
+  margin-bottom:5px;
+}
+.value{
+  font-size:14px;
+  font-weight:600;
+}
+.amount{
+  font-size:18px;
+  font-weight:800;
+}
+.status{
+  display:inline-block;
+  margin-top:10px;
+  padding:5px 9px;
+  border-radius:8px;
+  background:rgba(255,255,255,.06);
+  color:#aeb9c9;
+  font-size:11px;
+}
+.logout{
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);
+  background:#0b111b;
+  color:#d5dce7;
+  cursor:pointer;
+  font-size:14px;
+  font-weight:600;
+}
+@media(max-width:600px){
+  .card{padding:20px}
+  .row{align-items:flex-start}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="topbar">
+    <a href="dashboard.html" class="back">← Kabinetə qayıt</a>
+    <div class="logo">QAZANC ADMIN</div>
+  </div>
+
+  <div class="card">
+
+    <h1>Admin Panel</h1>
+
+    <div class="subtitle">
+      Ödəniş sorğələrinin idarəetmə görünüşü
+    </div>
+
+    <div class="section">
+
+      <div class="title">
+        Gələn ödəniş sorğuları
+      </div>
+
+      <div id="list">
+        <div class="loading">Məlumatlar yüklənir...</div>
+      </div>
+
+    </div>
+
+    <button class="logout" id="logoutBtn">
+      Hesabdan çıxış
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+  "https://gefbhrdjddgpdeulmgru.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_xopjwCK8Aw2wXUhIuK24Ew_lG5uCYRx";
+
+const client =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+async function loadAdmin(){
+
+  const list =
+    document.getElementById("list");
+
+  const {
+    data:userData,
+    error:userError
+  } = await client.auth.getUser();
+
+  if(
+    userError ||
+    !userData ||
+    !userData.user
+  ){
+    window.location.href="index.html";
+    return;
+  }
+
+  const userId =
+    userData.user.id;
+
+  const {
+    data:profile,
+    error:profileError
+  } = await client
+    .from("profiles")
+    .select("role")
+    .eq("id",userId)
+    .single();
+
+  if(
+    profileError ||
+    !profile ||
+    profile.role !== "admin"
+  ){
+
+    list.innerHTML =
+      '<div class="error">' +
+      'Bu səhifəyə giriş icazəniz yoxdur.' +
+      '</div>';
+
+    return;
+  }
+
+  const {
+    data,
+    error
+  } = await client
+    .from("odenisler")
+    .select("id, istifadeci_id, mebleg, status, yaradildi")
+    .order("id",{ascending:false});
+
+  if(error){
+
+    list.innerHTML =
+      '<div class="error">' +
+      '<strong>Supabase xətası</strong><br><br>' +
+      error.message +
+      '</div>';
+
+    return;
+  }
+
+  if(!data || data.length===0){
+
+    list.innerHTML =
+      '<div class="empty">' +
+      'Hələ ödəniş sorğusu yoxdur.' +
+      '</div>';
+
+    return;
+  }
+
+  list.innerHTML="";
+
+  data.forEach(item=>{
+
+    const date =
+      item.yaradildi
+      ? new Date(item.yaradildi)
+          .toLocaleString("az-AZ")
+      : "—";
+
+    const row =
+      document.createElement("div");
+
+    row.className="request";
+
+    row.innerHTML=`
+
+      <div class="row">
+
+        <div>
+          <div class="label">Sorğu ID</div>
+          <div class="value">#${item.id}</div>
+        </div>
+
+        <div style="text-align:right">
+          <div class="label">Məbləğ</div>
+          <div class="amount">
+            ${Number(item.mebleg || 0).toFixed(2)} AZN
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:14px">
+
+        <div class="label">
+          İstifadəçi ID
+        </div>
+
+        <div class="value">
+          ${item.istifadeci_id}
+        </div>
+
+      </div>
+
+      <div class="status">
+        Status: ${item.status || "gozleyir"}
+      </div>
+
+      <div class="label" style="margin-top:12px">
+        Tarix: ${date}
+      </div>
+
+    `;
+
+    list.appendChild(row);
+
+  });
+
+}
+
+document
+  .getElementById("logoutBtn")
+  .addEventListener("click",async()=>{
+
+    await client.auth.signOut();
+
+    window.location.href="index.html";
+
+  });
+
+loadAdmin();
+
+</script>
+
+</body>
+</html>
