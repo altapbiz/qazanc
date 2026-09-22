@@ -3,11 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Admin Panel — Qazanc</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
 body{
   min-height:100vh;
   font-family:Inter,Arial,sans-serif;
@@ -18,40 +25,76 @@ body{
     #070b12;
   padding:25px 16px;
 }
-.container{max-width:900px;margin:auto}
+
+.container{
+  max-width:950px;
+  margin:auto;
+}
+
 .topbar{
   display:flex;
   justify-content:space-between;
   align-items:center;
   margin-bottom:25px;
+  gap:15px;
 }
-.logo{font-size:22px;font-weight:800;letter-spacing:1px}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:1px;
+}
+
 .back{
   color:#aeb9c9;
   text-decoration:none;
   font-size:14px;
 }
+
 .card{
-  background:rgba(15,22,34,.82);
+  background:rgba(15,22,34,.84);
   border:1px solid rgba(255,255,255,.08);
   border-radius:24px;
   padding:28px;
   box-shadow:0 20px 60px rgba(0,0,0,.35);
   backdrop-filter:blur(20px);
 }
-h1{font-size:26px}
+
+h1{
+  font-size:26px;
+}
+
 .subtitle{
   margin-top:7px;
   color:#8996a9;
   font-size:13px;
 }
-.section{margin-top:28px}
+
+.admin-badge{
+  display:inline-flex;
+  margin-top:14px;
+  padding:7px 11px;
+  border-radius:10px;
+  background:rgba(40,190,120,.10);
+  border:1px solid rgba(40,190,120,.20);
+  color:#65e0a4;
+  font-size:12px;
+  font-weight:700;
+}
+
+.section{
+  margin-top:28px;
+}
+
 .title{
   font-size:15px;
   font-weight:700;
   margin-bottom:14px;
 }
-.loading,.empty,.error{
+
+.loading,
+.empty,
+.error{
   padding:20px;
   text-align:center;
   border-radius:15px;
@@ -59,45 +102,88 @@ h1{font-size:26px}
   color:#8996a9;
   font-size:13px;
 }
+
 .error{
   color:#ff8585;
   border:1px solid rgba(255,70,70,.18);
 }
+
 .request{
   padding:18px;
-  margin-bottom:10px;
-  border-radius:16px;
+  margin-bottom:12px;
+  border-radius:18px;
   background:#0b111b;
   border:1px solid rgba(255,255,255,.07);
 }
+
 .row{
   display:flex;
   justify-content:space-between;
   align-items:center;
   gap:15px;
 }
+
 .label{
   color:#8996a9;
   font-size:11px;
   margin-bottom:5px;
 }
+
 .value{
   font-size:14px;
   font-weight:600;
+  word-break:break-all;
 }
+
 .amount{
-  font-size:18px;
+  font-size:19px;
   font-weight:800;
 }
+
 .status{
   display:inline-block;
-  margin-top:10px;
-  padding:5px 9px;
-  border-radius:8px;
+  margin-top:12px;
+  padding:6px 10px;
+  border-radius:9px;
   background:rgba(255,255,255,.06);
   color:#aeb9c9;
   font-size:11px;
 }
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:15px;
+}
+
+.action-btn{
+  border:0;
+  padding:10px 13px;
+  border-radius:10px;
+  cursor:pointer;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+}
+
+.approve{
+  background:#147a52;
+}
+
+.reject{
+  background:#8c3030;
+}
+
+.pending{
+  background:#34445c;
+}
+
+.action-btn:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
 .logout{
   width:100%;
   margin-top:18px;
@@ -110,9 +196,87 @@ h1{font-size:26px}
   font-size:14px;
   font-weight:600;
 }
+
+.logout:hover{
+  background:#121b29;
+}
+
+.refresh{
+  width:100%;
+  margin-top:10px;
+  padding:13px;
+  border-radius:13px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.035);
+  color:#cdd6e3;
+  cursor:pointer;
+  font-size:13px;
+  font-weight:600;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+
+.stat{
+  padding:15px;
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.stat-number{
+  font-size:20px;
+  font-weight:800;
+}
+
+.stat-label{
+  margin-top:5px;
+  color:#8996a9;
+  font-size:11px;
+}
+
 @media(max-width:600px){
-  .card{padding:20px}
-  .row{align-items:flex-start}
+
+  body{
+    padding:15px 10px;
+  }
+
+  .card{
+    padding:20px;
+    border-radius:20px;
+  }
+
+  .topbar{
+    align-items:flex-start;
+  }
+
+  .logo{
+    font-size:18px;
+  }
+
+  .row{
+    align-items:flex-start;
+  }
+
+  .amount{
+    font-size:16px;
+  }
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .actions{
+    flex-direction:column;
+  }
+
+  .action-btn{
+    width:100%;
+  }
 }
 </style>
 </head>
@@ -122,8 +286,13 @@ h1{font-size:26px}
 <div class="container">
 
   <div class="topbar">
-    <a href="dashboard.html" class="back">← Kabinetə qayıt</a>
-    <div class="logo">QAZANC ADMIN</div>
+    <a href="dashboard.html" class="back">
+      ← Kabinetə qayıt
+    </a>
+
+    <div class="logo">
+      QAZANC ADMIN
+    </div>
   </div>
 
   <div class="card">
@@ -134,6 +303,29 @@ h1{font-size:26px}
       Ödəniş sorğələrinin idarəetmə görünüşü
     </div>
 
+    <div id="adminBadge" class="admin-badge">
+      Admin hesab
+    </div>
+
+    <div class="stats">
+
+      <div class="stat">
+        <div id="totalCount" class="stat-number">0</div>
+        <div class="stat-label">Ümumi sorğu</div>
+      </div>
+
+      <div class="stat">
+        <div id="pendingCount" class="stat-number">0</div>
+        <div class="stat-label">Gözləyən</div>
+      </div>
+
+      <div class="stat">
+        <div id="approvedCount" class="stat-number">0</div>
+        <div class="stat-label">Təsdiqlənən</div>
+      </div>
+
+    </div>
+
     <div class="section">
 
       <div class="title">
@@ -141,10 +333,16 @@ h1{font-size:26px}
       </div>
 
       <div id="list">
-        <div class="loading">Məlumatlar yüklənir...</div>
+        <div class="loading">
+          Məlumatlar yüklənir...
+        </div>
       </div>
 
     </div>
+
+    <button class="refresh" id="refreshBtn">
+      ↻ Məlumatları yenilə
+    </button>
 
     <button class="logout" id="logoutBtn">
       Hesabdan çıxış
@@ -168,71 +366,218 @@ const client =
     SUPABASE_KEY
   );
 
-async function loadAdmin(){
 
-  const list =
-    document.getElementById("list");
+function showError(message){
+
+  document.getElementById("list").innerHTML =
+    '<div class="error">' +
+    message +
+    '</div>';
+
+}
+
+
+async function checkAdmin(){
 
   const {
-    data:userData,
-    error:userError
+    data,
+    error
   } = await client.auth.getUser();
 
   if(
-    userError ||
-    !userData ||
-    !userData.user
+    error ||
+    !data ||
+    !data.user
   ){
-    window.location.href="index.html";
-    return;
+
+    window.location.href = "index.html";
+    return null;
   }
 
-  const userId =
-    userData.user.id;
+  const user = data.user;
 
   const {
     data:profile,
     error:profileError
   } = await client
     .from("profiles")
-    .select("role")
-    .eq("id",userId)
-    .single();
+    .select("id,username,role")
+    .eq("id",user.id)
+    .maybeSingle();
 
-  if(
-    profileError ||
-    !profile ||
-    profile.role !== "admin"
-  ){
 
-    list.innerHTML =
-      '<div class="error">' +
-      'Bu səhifəyə giriş icazəniz yoxdur.' +
-      '</div>';
+  if(profileError){
+
+    console.error(profileError);
+
+    showError(
+      "Profil yoxlanılarkən xəta baş verdi: " +
+      profileError.message
+    );
+
+    return null;
+  }
+
+
+  if(!profile){
+
+    showError(
+      "İstifadəçi profili tapılmadı."
+    );
+
+    return null;
+  }
+
+
+  const role =
+    String(profile.role || "")
+      .trim()
+      .toLowerCase();
+
+
+  if(role !== "admin"){
+
+    showError(
+      "Bu səhifəyə giriş icazəniz yoxdur."
+    );
+
+    return null;
+  }
+
+
+  document.getElementById("adminBadge").textContent =
+    "Admin: " +
+    (profile.username || "Makmudof");
+
+  return user;
+}
+
+
+async function updateStats(data){
+
+  const total =
+    data.length;
+
+  const pending =
+    data.filter(item =>
+      String(item.status || "gozleyir")
+        .toLowerCase() === "gozleyir"
+    ).length;
+
+  const approved =
+    data.filter(item =>
+      String(item.status || "")
+        .toLowerCase() === "tesdiqlendi" ||
+      String(item.status || "")
+        .toLowerCase() === "təsdiqləndi"
+    ).length;
+
+
+  document.getElementById("totalCount")
+    .textContent = total;
+
+  document.getElementById("pendingCount")
+    .textContent = pending;
+
+  document.getElementById("approvedCount")
+    .textContent = approved;
+}
+
+
+async function changeStatus(id,status){
+
+  const buttons =
+    document.querySelectorAll(
+      `[data-request-id="${id}"] .action-btn`
+    );
+
+  buttons.forEach(btn=>{
+    btn.disabled = true;
+  });
+
+
+  const {
+    error
+  } = await client
+    .from("odenisler")
+    .update({
+      status:status
+    })
+    .eq("id",id);
+
+
+  if(error){
+
+    alert(
+      "Status dəyişdirilmədi:\n" +
+      error.message
+    );
+
+    buttons.forEach(btn=>{
+      btn.disabled = false;
+    });
 
     return;
   }
+
+
+  await loadPayments();
+}
+
+
+async function loadPayments(){
+
+  const list =
+    document.getElementById("list");
+
+  list.innerHTML =
+    '<div class="loading">Məlumatlar yüklənir...</div>';
+
+
+  const user =
+    await checkAdmin();
+
+
+  if(!user){
+    return;
+  }
+
 
   const {
     data,
     error
   } = await client
     .from("odenisler")
-    .select("id, istifadeci_id, mebleg, status, yaradildi")
-    .order("id",{ascending:false});
+    .select(
+      "id, istifadeci_id, mebleg, status, yaradildi"
+    )
+    .order(
+      "id",
+      {ascending:false}
+    );
+
 
   if(error){
 
-    list.innerHTML =
-      '<div class="error">' +
-      '<strong>Supabase xətası</strong><br><br>' +
-      error.message +
-      '</div>';
+    console.error(error);
+
+    showError(
+      "<strong>Supabase xətası</strong><br><br>" +
+      error.message
+    );
 
     return;
   }
 
-  if(!data || data.length===0){
+
+  const payments =
+    data || [];
+
+
+  await updateStats(payments);
+
+
+  if(payments.length === 0){
 
     list.innerHTML =
       '<div class="empty">' +
@@ -242,9 +587,11 @@ async function loadAdmin(){
     return;
   }
 
-  list.innerHTML="";
 
-  data.forEach(item=>{
+  list.innerHTML = "";
+
+
+  payments.forEach(item=>{
 
     const date =
       item.yaradildi
@@ -252,28 +599,54 @@ async function loadAdmin(){
           .toLocaleString("az-AZ")
       : "—";
 
+
+    const currentStatus =
+      item.status || "gozleyir";
+
+
     const row =
       document.createElement("div");
 
-    row.className="request";
 
-    row.innerHTML=`
+    row.className = "request";
+
+    row.setAttribute(
+      "data-request-id",
+      item.id
+    );
+
+
+    row.innerHTML = `
 
       <div class="row">
 
         <div>
-          <div class="label">Sorğu ID</div>
-          <div class="value">#${item.id}</div>
+
+          <div class="label">
+            Sorğu ID
+          </div>
+
+          <div class="value">
+            #${item.id}
+          </div>
+
         </div>
 
+
         <div style="text-align:right">
-          <div class="label">Məbləğ</div>
+
+          <div class="label">
+            Məbləğ
+          </div>
+
           <div class="amount">
             ${Number(item.mebleg || 0).toFixed(2)} AZN
           </div>
+
         </div>
 
       </div>
+
 
       <div style="margin-top:14px">
 
@@ -282,20 +655,51 @@ async function loadAdmin(){
         </div>
 
         <div class="value">
-          ${item.istifadeci_id}
+          ${item.istifadeci_id || "—"}
         </div>
 
       </div>
 
+
       <div class="status">
-        Status: ${item.status || "gozleyir"}
+        Status: ${currentStatus}
       </div>
+
 
       <div class="label" style="margin-top:12px">
         Tarix: ${date}
       </div>
 
+
+      <div class="actions">
+
+        <button
+          class="action-btn approve"
+          onclick="changeStatus('${item.id}','tesdiqlendi')"
+        >
+          ✓ Təsdiqlə
+        </button>
+
+
+        <button
+          class="action-btn reject"
+          onclick="changeStatus('${item.id}','redd edildi')"
+        >
+          ✕ Rədd et
+        </button>
+
+
+        <button
+          class="action-btn pending"
+          onclick="changeStatus('${item.id}','gozleyir')"
+        >
+          ↻ Gözləyir
+        </button>
+
+      </div>
+
     `;
+
 
     list.appendChild(row);
 
@@ -303,17 +707,31 @@ async function loadAdmin(){
 
 }
 
+
+document
+  .getElementById("refreshBtn")
+  .addEventListener(
+    "click",
+    loadPayments
+  );
+
+
 document
   .getElementById("logoutBtn")
-  .addEventListener("click",async()=>{
+  .addEventListener(
+    "click",
+    async()=>{
 
-    await client.auth.signOut();
+      await client.auth.signOut();
 
-    window.location.href="index.html";
+      window.location.href =
+        "index.html";
 
-  });
+    }
+  );
 
-loadAdmin();
+
+loadPayments();
 
 </script>
 
