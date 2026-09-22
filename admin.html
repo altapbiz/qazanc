@@ -9,11 +9,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
+*{box-sizing:border-box;margin:0;padding:0}
 
 body{
   min-height:100vh;
@@ -36,7 +32,6 @@ body{
   justify-content:space-between;
   align-items:center;
   margin-bottom:25px;
-  gap:15px;
 }
 
 .logo{
@@ -70,8 +65,8 @@ h1{
   font-size:13px;
 }
 
-.admin-badge{
-  display:inline-flex;
+.badge{
+  display:inline-block;
   margin-top:14px;
   padding:7px 11px;
   border-radius:10px;
@@ -80,6 +75,31 @@ h1{
   color:#65e0a4;
   font-size:12px;
   font-weight:700;
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:20px;
+}
+
+.stat{
+  padding:16px;
+  border-radius:15px;
+  background:rgba(255,255,255,.035);
+  border:1px solid rgba(255,255,255,.06);
+}
+
+.stat-number{
+  font-size:21px;
+  font-weight:800;
+}
+
+.stat-label{
+  margin-top:5px;
+  color:#8996a9;
+  font-size:11px;
 }
 
 .section{
@@ -184,59 +204,27 @@ h1{
   cursor:not-allowed;
 }
 
+.refresh,
 .logout{
   width:100%;
-  margin-top:18px;
+  margin-top:10px;
   padding:14px;
   border-radius:13px;
-  border:1px solid rgba(255,255,255,.09);
-  background:#0b111b;
-  color:#d5dce7;
-  cursor:pointer;
-  font-size:14px;
-  font-weight:600;
-}
-
-.logout:hover{
-  background:#121b29;
-}
-
-.refresh{
-  width:100%;
-  margin-top:10px;
-  padding:13px;
-  border-radius:13px;
-  border:1px solid rgba(255,255,255,.09);
-  background:rgba(255,255,255,.035);
-  color:#cdd6e3;
   cursor:pointer;
   font-size:13px;
   font-weight:600;
 }
 
-.stats{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  margin-top:20px;
-}
-
-.stat{
-  padding:15px;
-  border-radius:15px;
+.refresh{
+  border:1px solid rgba(255,255,255,.09);
   background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.06);
+  color:#cdd6e3;
 }
 
-.stat-number{
-  font-size:20px;
-  font-weight:800;
-}
-
-.stat-label{
-  margin-top:5px;
-  color:#8996a9;
-  font-size:11px;
+.logout{
+  border:1px solid rgba(255,255,255,.09);
+  background:#0b111b;
+  color:#d5dce7;
 }
 
 @media(max-width:600px){
@@ -247,27 +235,14 @@ h1{
 
   .card{
     padding:20px;
-    border-radius:20px;
-  }
-
-  .topbar{
-    align-items:flex-start;
-  }
-
-  .logo{
-    font-size:18px;
-  }
-
-  .row{
-    align-items:flex-start;
-  }
-
-  .amount{
-    font-size:16px;
   }
 
   .stats{
     grid-template-columns:1fr;
+  }
+
+  .row{
+    align-items:flex-start;
   }
 
   .actions{
@@ -286,6 +261,7 @@ h1{
 <div class="container">
 
   <div class="topbar">
+
     <a href="dashboard.html" class="back">
       ← Kabinetə qayıt
     </a>
@@ -293,6 +269,7 @@ h1{
     <div class="logo">
       QAZANC ADMIN
     </div>
+
   </div>
 
   <div class="card">
@@ -303,24 +280,24 @@ h1{
       Ödəniş sorğələrinin idarəetmə görünüşü
     </div>
 
-    <div id="adminBadge" class="admin-badge">
-      Admin hesab
+    <div class="badge">
+      ✓ Admin hesab
     </div>
 
     <div class="stats">
 
       <div class="stat">
-        <div id="totalCount" class="stat-number">0</div>
+        <div class="stat-number" id="totalCount">0</div>
         <div class="stat-label">Ümumi sorğu</div>
       </div>
 
       <div class="stat">
-        <div id="pendingCount" class="stat-number">0</div>
+        <div class="stat-number" id="pendingCount">0</div>
         <div class="stat-label">Gözləyən</div>
       </div>
 
       <div class="stat">
-        <div id="approvedCount" class="stat-number">0</div>
+        <div class="stat-number" id="approvedCount">0</div>
         <div class="stat-label">Təsdiqlənən</div>
       </div>
 
@@ -367,16 +344,6 @@ const client =
   );
 
 
-function showError(message){
-
-  document.getElementById("list").innerHTML =
-    '<div class="error">' +
-    message +
-    '</div>';
-
-}
-
-
 async function checkAdmin(){
 
   const {
@@ -384,144 +351,44 @@ async function checkAdmin(){
     error
   } = await client.auth.getUser();
 
-  if(
-    error ||
-    !data ||
-    !data.user
-  ){
+  if(error || !data || !data.user){
 
-    window.location.href = "index.html";
-    return null;
+    window.location.href="index.html";
+
+    return false;
   }
-
-  const user = data.user;
-
-  const {
-    data:profile,
-    error:profileError
-  } = await client
-    .from("profiles")
-    .select("id,username,role")
-    .eq("id",user.id)
-    .maybeSingle();
-
-
-  if(profileError){
-
-    console.error(profileError);
-
-    showError(
-      "Profil yoxlanılarkən xəta baş verdi: " +
-      profileError.message
-    );
-
-    return null;
-  }
-
-
-  if(!profile){
-
-    showError(
-      "İstifadəçi profili tapılmadı."
-    );
-
-    return null;
-  }
-
-
-  const role =
-    String(profile.role || "")
-      .trim()
-      .toLowerCase();
-
-
-  if(role !== "admin"){
-
-    showError(
-      "Bu səhifəyə giriş icazəniz yoxdur."
-    );
-
-    return null;
-  }
-
-
-  document.getElementById("adminBadge").textContent =
-    "Admin: " +
-    (profile.username || "Makmudof");
-
-  return user;
-}
-
-
-async function updateStats(data){
-
-  const total =
-    data.length;
-
-  const pending =
-    data.filter(item =>
-      String(item.status || "gozleyir")
-        .toLowerCase() === "gozleyir"
-    ).length;
-
-  const approved =
-    data.filter(item =>
-      String(item.status || "")
-        .toLowerCase() === "tesdiqlendi" ||
-      String(item.status || "")
-        .toLowerCase() === "təsdiqləndi"
-    ).length;
-
-
-  document.getElementById("totalCount")
-    .textContent = total;
-
-  document.getElementById("pendingCount")
-    .textContent = pending;
-
-  document.getElementById("approvedCount")
-    .textContent = approved;
-}
-
-
-async function changeStatus(id,status){
-
-  const buttons =
-    document.querySelectorAll(
-      `[data-request-id="${id}"] .action-btn`
-    );
-
-  buttons.forEach(btn=>{
-    btn.disabled = true;
-  });
 
 
   const {
-    error
-  } = await client
-    .from("odenisler")
-    .update({
-      status:status
-    })
-    .eq("id",id);
+    data:isAdmin,
+    error:adminError
+  } = await client.rpc("is_admin");
 
 
-  if(error){
+  if(adminError){
 
-    alert(
-      "Status dəyişdirilmədi:\n" +
-      error.message
-    );
+    document.getElementById("list").innerHTML =
+      '<div class="error">' +
+      '<strong>Admin yoxlama xətası</strong><br><br>' +
+      adminError.message +
+      '</div>';
 
-    buttons.forEach(btn=>{
-      btn.disabled = false;
-    });
-
-    return;
+    return false;
   }
 
 
-  await loadPayments();
+  if(isAdmin !== true){
+
+    document.getElementById("list").innerHTML =
+      '<div class="error">' +
+      'Bu səhifəyə giriş icazəniz yoxdur.' +
+      '</div>';
+
+    return false;
+  }
+
+
+  return true;
 }
 
 
@@ -531,14 +398,16 @@ async function loadPayments(){
     document.getElementById("list");
 
   list.innerHTML =
-    '<div class="loading">Məlumatlar yüklənir...</div>';
+    '<div class="loading">' +
+    'Məlumatlar yüklənir...' +
+    '</div>';
 
 
-  const user =
+  const allowed =
     await checkAdmin();
 
 
-  if(!user){
+  if(!allowed){
     return;
   }
 
@@ -559,12 +428,12 @@ async function loadPayments(){
 
   if(error){
 
-    console.error(error);
-
-    showError(
-      "<strong>Supabase xətası</strong><br><br>" +
-      error.message
-    );
+    list.innerHTML =
+      '<div class="error">' +
+      '<strong>Ödəniş məlumatları oxunmadı</strong>' +
+      '<br><br>' +
+      error.message +
+      '</div>';
 
     return;
   }
@@ -574,7 +443,41 @@ async function loadPayments(){
     data || [];
 
 
-  await updateStats(payments);
+  const total =
+    payments.length;
+
+
+  const pending =
+    payments.filter(item =>
+      String(item.status || "gozleyir")
+        .toLowerCase()
+        .includes("goz")
+    ).length;
+
+
+  const approved =
+    payments.filter(item => {
+
+      const status =
+        String(item.status || "")
+          .toLowerCase();
+
+      return (
+        status.includes("tesdiq") ||
+        status.includes("təsdiq")
+      );
+
+    }).length;
+
+
+  document.getElementById("totalCount")
+    .textContent = total;
+
+  document.getElementById("pendingCount")
+    .textContent = pending;
+
+  document.getElementById("approvedCount")
+    .textContent = approved;
 
 
   if(payments.length === 0){
@@ -588,7 +491,7 @@ async function loadPayments(){
   }
 
 
-  list.innerHTML = "";
+  list.innerHTML="";
 
 
   payments.forEach(item=>{
@@ -600,23 +503,12 @@ async function loadPayments(){
       : "—";
 
 
-    const currentStatus =
-      item.status || "gozleyir";
-
-
     const row =
       document.createElement("div");
 
+    row.className="request";
 
-    row.className = "request";
-
-    row.setAttribute(
-      "data-request-id",
-      item.id
-    );
-
-
-    row.innerHTML = `
+    row.innerHTML=`
 
       <div class="row">
 
@@ -631,7 +523,6 @@ async function loadPayments(){
           </div>
 
         </div>
-
 
         <div style="text-align:right">
 
@@ -662,7 +553,7 @@ async function loadPayments(){
 
 
       <div class="status">
-        Status: ${currentStatus}
+        Status: ${item.status || "gozleyir"}
       </div>
 
 
@@ -680,14 +571,12 @@ async function loadPayments(){
           ✓ Təsdiqlə
         </button>
 
-
         <button
           class="action-btn reject"
           onclick="changeStatus('${item.id}','redd edildi')"
         >
           ✕ Rədd et
         </button>
-
 
         <button
           class="action-btn pending"
@@ -700,11 +589,37 @@ async function loadPayments(){
 
     `;
 
-
     list.appendChild(row);
 
   });
 
+}
+
+
+async function changeStatus(id,status){
+
+  const {
+    error
+  } = await client
+    .from("odenisler")
+    .update({
+      status:status
+    })
+    .eq("id",id);
+
+
+  if(error){
+
+    alert(
+      "Status dəyişdirilmədi:\n\n" +
+      error.message
+    );
+
+    return;
+  }
+
+
+  await loadPayments();
 }
 
 
@@ -724,8 +639,7 @@ document
 
       await client.auth.signOut();
 
-      window.location.href =
-        "index.html";
+      window.location.href="index.html";
 
     }
   );
